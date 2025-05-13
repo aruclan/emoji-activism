@@ -262,7 +262,60 @@ position: fixed;
       left: auto;
       right: 10px;
     }
+    .mobile-button {
+  display: none;
+  position: fixed;
+  top: 10px;
+  z-index: 1000;
+  background-color: #fff;
+  color: #000;
+  border: 0.5px solid var(--border-color);
+  padding: 14px 40px;
+  font-size: 1rem;
+  border-radius: 999px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mobile-button:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+#disclaimerBox {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .disclaimer {
+    display: none;
   }
+  #disclaimerBox {
+    display: none;
+    position: fixed;
+    top: 60px;
+    left: 10px;
+    right: 10px;
+    background-color: var(--bg-secondary);
+    border: 0.5px solid var(--border-color);
+    font-size: 12px;
+    line-height: 1.3;
+    padding: 12px 15px;
+    z-index: 1000;
+  }
+
+  #disclaimerToggle {
+    display: block;
+    left: 10px;
+  }
+
+  #mobileHistoryBtn {
+    display: block;
+    right: 10px;
+    left: auto;
+  }
+}
 </style>
 
 </head>
@@ -281,7 +334,11 @@ position: fixed;
     <p>🍉 gained profound meaning, used to represent the colors of the Palestinian flag and the resilience of Gaza citizens. The shift to using this emoji online was a deliberate strategy to circumvent censorship and shadow banning on platforms such as TikTok, Instagram, and Facebook.</p>
     <p>Advocates suggest that employing emojis like 🍉 may confuse algorithms that tech companies reportedly use to suppress posts containing keywords related to Palestine or Gaza. This allows activists to signal solidarity and resistance across language and culture, reaching audiences despite platform restrictions.</p>
   </div>
-
+<button id="disclaimerToggle" class="mobile-button" onclick="toggleDisclaimer()">Disclaimer</button>
+<button id="mobileHistoryBtn" class="mobile-button" onclick="toggleMobileHistory()">History</button>
+<div id="disclaimerBox" class="disclaimer">
+  This experimental translator was created by Master’s students in Information Design at DAE. It analyzes the relationship between emojis and words based on the 1,000 most recent posts (as of 30/04/2025) related to 🍉 Palestine. Designed to explore media activism, censorship, and online resistance, the website provides only a partial view due to the limited dataset.
+</div>
   <div class="container">
  
     <button id="disclaimerToggle" class="mobile-disclaimer-btn" onclick="toggleDisclaimer()">Disclaimer</button>
