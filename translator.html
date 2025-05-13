@@ -55,14 +55,13 @@
 
   .history-column h3 {
     margin: 0;
-top: 0;
-position: fixed;
+    top: 0;
+    position: sticky;
     font-size: 20px;
     font-weight: 350;
     background-color: var(--bg-secondary);
     padding: 10px 0;
     border-bottom: 0.5px solid var(--border-color); /* Linea sotto il titolo */
-    position: sticky;
     z-index: 1;
   }
 
@@ -89,20 +88,35 @@ position: fixed;
     text-align: center;
   }
 
-  .mobile-history-btn {
+  .mobile-btn {
     display: none;
     position: fixed;
-    top: 10px;
-    left: 10px;
     z-index: 1000;
-    background-color: #000;
-    color: #fff;
-    border: none;
+    background-color: #fff;
+    color: #000;
+    border: 0.5px solid var(--border-color);
     padding: 10px 15px;
-    border-radius: 5px;
+    border-radius: 999px;
+    font-weight: 500;
+    transition: all 0.2s ease;
   }
 
-  .mobile-history-modal {
+  .mobile-btn:hover {
+    background-color: #000;
+    color: #fff;
+  }
+
+  .mobile-history-btn {
+    top: 10px;
+    left: 10px;
+  }
+
+  .mobile-disclaimer-btn {
+    top: 10px;
+    right: 10px;
+  }
+
+  .mobile-modal {
     display: none;
     position: fixed;
     top: 0;
@@ -115,9 +129,28 @@ position: fixed;
     overflow-y: auto;
   }
 
-  .mobile-history-modal h3 {
+  .mobile-modal h3 {
     font-size: 1.4rem;
     font-weight: 400;
+    margin-bottom: 20px;
+  }
+
+  .modal-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #fff;
+    color: #000;
+    border: 0.5px solid var(--border-color);
+    padding: 8px 20px;
+    border-radius: 999px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .modal-close-btn:hover {
+    background-color: #000;
+    color: #fff;
   }
 
   h2 {
@@ -201,41 +234,78 @@ position: fixed;
     margin-top: 30px;
   }
 
+  @media (max-width: 1024px) {
+    h2 {
+      font-size: 6rem;
+    }
+  }
+
   @media (max-width: 768px) {
     .container {
       flex-direction: column;
     }
 
-    .history-column {
+    .history-column, .disclaimer {
       display: none;
     }
 
     .main-column {
       width: 100%;
       margin-left: 0;
+      padding-top: 60px;
     }
 
-    .mobile-history-btn {
+    .mobile-btn {
       display: block;
-    }
-
-    .mobile-history-modal {
-      display: none;
     }
 
     h2 {
       font-size: 5rem;
+    }
+
+    .description {
+      font-size: 1rem;
+      padding: 0 15px;
+    }
+
+    textarea {
+      max-width: 95%;
+    }
+
+    #outputText {
+      max-width: 95%;
+    }
+
+    ul {
+      max-width: 95%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    h2 {
+      font-size: 4rem;
+    }
+
+    button {
+      padding: 12px 30px;
+      font-size: 0.9rem;
+    }
+
+    .mobile-btn {
+      padding: 8px 12px;
+      font-size: 0.85rem;
     }
   }
 </style>
 
 </head>
 <body>
-  <button class="mobile-history-btn" onclick="toggleMobileHistory()">History</button>
+  <button class="mobile-btn mobile-history-btn" onclick="toggleMobileModal('mobileHistoryModal')">History</button>
+  <button class="mobile-btn mobile-disclaimer-btn" onclick="toggleMobileModal('mobileDisclaimerModal')">Disclaimer</button>
 
-  <div class="mobile-history-modal" id="mobileHistoryModal">
-    <button onclick="toggleMobileHistory()" style="position: absolute; top: 10px; right: 10px;">Close</button>
+  <div class="mobile-modal" id="mobileHistoryModal">
     <h3>History</h3>
+    <button class="modal-close-btn" onclick="toggleMobileModal('mobileHistoryModal')">Close</button>
     <p>🍉 has evolved into a powerful symbol of Palestinian resistance, starting as physical displays in response to oppressive measures to its digital adoption as an emoji, ingeniously bypassing online censorship efforts. This transformation highlights the adaptability of symbolic communication in the face of restrictions on expression, allowing solidarity and national identity to persist and spread.</p>
     <p>The fruit's significance is rooted in its connection to the colors of the Palestinian flag and its resilient nature, making it a powerful emblem in challenging times.</p>
     <p>The symbolism of 🍉 began after the 1967 Six-Day War, when the Israeli government restricted displays of the Palestinian flag—red, green, black, and white—in Gaza and the West Bank. This crackdown included actions like shutting down an art gallery in Ramallah in 1980, with an Israeli officer reportedly stating that even art using the forbidden colors, like a watermelon, was prohibited.</p>
@@ -246,10 +316,16 @@ position: fixed;
     <p>Advocates suggest that employing emojis like 🍉 may confuse algorithms that tech companies reportedly use to suppress posts containing keywords related to Palestine or Gaza. This allows activists to signal solidarity and resistance across language and culture, reaching audiences despite platform restrictions.</p>
   </div>
 
+  <div class="mobile-modal" id="mobileDisclaimerModal">
+    <h3>Disclaimer</h3>
+    <button class="modal-close-btn" onclick="toggleMobileModal('mobileDisclaimerModal')">Close</button>
+    <p>This experimental translator was created by Master's students in Information Design at DAE. It analyzes the relationship between emojis and words based on the 1,000 most recent posts (as of 30/04/2025) related to 🍉 Palestine. Designed to explore media activism, censorship, and online resistance, the website provides only a partial view due to the limited dataset.</p>
+  </div>
+
   <div class="container">
- <div class="disclaimer">
-        This experimental translator was created by Master’s students in Information Design at DAE. It analyzes the relationship between emojis and words based on the 1,000 most recent posts (as of 30/04/2025) related to 🍉 Palestine. Designed to explore media activism, censorship, and online resistance, the website provides only a partial view due to the limited dataset.
-      </div>
+    <div class="disclaimer">
+        This experimental translator was created by Master's students in Information Design at DAE. It analyzes the relationship between emojis and words based on the 1,000 most recent posts (as of 30/04/2025) related to 🍉 Palestine. Designed to explore media activism, censorship, and online resistance, the website provides only a partial view due to the limited dataset.
+    </div>
     <div class="history-column">
       <h3>History</h3>
       <p>🍉 has evolved into a powerful symbol of Palestinian resistance, starting as physical displays in response to oppressive measures to its digital adoption as an emoji, ingeniously bypassing online censorship efforts. This transformation highlights the adaptability of symbolic communication in the face of restrictions on expression, allowing solidarity and national identity to persist and spread.</p>
@@ -282,8 +358,8 @@ position: fixed;
   </div>
 
   <script>
-    function toggleMobileHistory() {
-      const modal = document.getElementById('mobileHistoryModal');
+    function toggleMobileModal(modalId) {
+      const modal = document.getElementById(modalId);
       modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
     }
 
