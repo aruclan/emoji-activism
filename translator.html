@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Emoji Translator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+  :root {
+    --bg-primary: #ffffff;          /* Sfondo principale */
+    --text-primary: #1a1a1a;        /* Testo principale */
+    --bg-secondary: #ffffff;        /* Sfondo secondario (stesso del primario) */
+    --border-color: #000;           /* Colore dei bordi */
+    --shadow-light: rgba(0, 0, 0, 0.05);
+    --shadow-medium: rgba(0,0,0,0.1);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background-color: var(--bg-primary);   /* Sfondo della pagina */
+    color: var(--text-primary);            /* Colore del testo */
+    font-family: 'Inter', sans-serif;      /* Font principale */
+    line-height: 1.7;                      /* Spaziatura del testo */
+    display: flex;                         /* Layout flex orizzontale */
+    min-height: 100vh;                     /* Altezza minima intera finestra */
+  }
+
+  .container {
+    display: flex;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .history-column {
+    position: fixed;                         /* Colonna fissa a sinistra */
+    top: 0;
+    left: 0;
+    width: 35%;                              /* 35% della larghezza dello schermo */
+    height: 100vh;                           /* Altezza piena della finestra */
+    padding: 20px;
+    background-color: var(--bg-secondary);
+    border-right: 0.5px solid var(--border-color);
+    overflow-y: auto;                        /* Scroll se contenuto lungo */
+    font-size: 0.9rem;
+    line-height: 1.6;
+    z-index: 10;
+  }
+
+  .history-column h3 {
+    margin: 0;
+top: 0;
+position: fixed;
+    font-size: 20px;
+    font-weight: 350;
+    background-color: var(--bg-secondary);
+    padding: 10px 0;
+    border-bottom: 0.5px solid var(--border-color); /* Linea sotto il titolo */
+    position: sticky;
+    z-index: 1;
+  }
+
+  .disclaimer {
+    position: fixed;                         /* Box fisso in alto */
+    top: 0;
+    left: 35%;                               /* Inizia dove finisce history-column */
+    width: 65%;
+    font-size: 12px;                         /* Dimensione maggiore richiesta */
+    line-height: 1.3;
+    padding: 12px 15px;
+    color: #000;
+    font-weight: 300;
+    text-align: left;                       /* Allineamento a destra richiesto */
+    background-color: var(--bg-secondary);
+    z-index: 12;
+    border-bottom: 0.45px solid var(--border-color); /* Linea sotto il disclaimer */
+  }
+
+  .main-column {
+    width: 60%;
+    margin-left: 40%;                        /* Distanza dalla sinistra per non sovrapporsi */
+    padding: 100px 20px 60px;
+    text-align: center;
+  }
+
+  .mobile-history-btn {
+    display: none;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+  }
+
+  .mobile-history-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-secondary);
+    z-index: 2000;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  .mobile-history-modal h3 {
+    font-size: 1.4rem;
+    font-weight: 400;
+  }
+
+  h2 {
+    font-size: 8rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+
+  .description {
+    font-size: 1.1rem;
+    line-height: 1.4;
+    max-width: 700px;
+    margin: 0 auto 15px;
+  }
+
+  textarea {
+    width: 100%;
+    max-width: 700px;
+    height: 160px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    padding: 16px;
+    margin-top: 20px;
+    border: 0.5px solid var(--border-color);
+    background: var(--bg-secondary);
+    border-radius: 12px;
+  }
+
+  button {
+    background-color: #fff;
+    color: #000;
+    border: 0.5px solid var(--border-color);
+    padding: 14px 40px;
+    font-size: 1rem;
+    margin-top: 25px;
+    cursor: pointer;
+    border-radius: 999px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  button:hover {
+    background-color: #000;
+    color: #fff;
+  }
+
+  .output-container {
+    display: none;
+    margin-top: 30px;
+  }
+
+  #outputText {
+    font-size: 1.25rem;
+    font-style: italic;
+    padding: 15px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 0.5px solid var(--border-color);
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    max-width: 700px;
+    margin: 40px auto 0;
+    text-align: left;
+  }
+
+  li {
+    margin-bottom: 15px;
+    font-size: 1rem;
+    border-bottom: 0.5px solid var(--border-color);
+    padding-bottom: 10px;
+  }
+
+  #historyContainer {
+    margin-top: 30px;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+    }
+
+    .history-column {
+      display: none;
+    }
+
+    .main-column {
+      width: 100%;
+      margin-left: 0;
+    }
+
+    .mobile-history-btn {
+      display: block;
+    }
+
+    .mobile-history-modal {
+      display: none;
+    }
+
+    h2 {
+      font-size: 5rem;
+    }
+  }
+</style>
+
+</head>
+<body>
+  <button class="mobile-history-btn" onclick="toggleMobileHistory()">History</button>
+
+  <div class="mobile-history-modal" id="mobileHistoryModal">
+    <button onclick="toggleMobileHistory()" style="position: absolute; top: 10px; right: 10px;">Close</button>
+    <h3>History</h3>
+    <p>🍉 has evolved into a powerful symbol of Palestinian resistance, starting as physical displays in response to oppressive measures to its digital adoption as an emoji, ingeniously bypassing online censorship efforts. This transformation highlights the adaptability of symbolic communication in the face of restrictions on expression, allowing solidarity and national identity to persist and spread.</p>
+    <p>The fruit's significance is rooted in its connection to the colors of the Palestinian flag and its resilient nature, making it a powerful emblem in challenging times.</p>
+    <p>The symbolism of 🍉 began after the 1967 Six-Day War, when the Israeli government restricted displays of the Palestinian flag—red, green, black, and white—in Gaza and the West Bank. This crackdown included actions like shutting down an art gallery in Ramallah in 1980, with an Israeli officer reportedly stating that even art using the forbidden colors, like a watermelon, was prohibited.</p>
+    <p>In defiance, some people started using the 🍉's imagery or carrying the fruit itself in public, as its colors mirrored the banned flag: red pulp, green and white rind, and black seeds. This act served as a form of protest and a way to express Palestinian identity and resistance.</p>
+    <p>🍉 saw a resurgence in 2023, particularly after Israel's National Security Minister banned Palestinian flags in public places, prompting activists to use watermelon stickers as a form of opposition.</p>
+    <p>In 2023, social media became a crucial space for sharing information about the most recent Gaza conflict, but it also experienced significant censorship aimed at suppressing Palestinian narratives. To navigate these restrictions, activists turned to unconventional communication methods, transforming ordinary symbols like emojis into powerful tools.</p>
+    <p>🍉 gained profound meaning, used to represent the colors of the Palestinian flag and the resilience of Gaza citizens. The shift to using this emoji online was a deliberate strategy to circumvent censorship and shadow banning on platforms such as TikTok, Instagram, and Facebook.</p>
+    <p>Advocates suggest that employing emojis like 🍉 may confuse algorithms that tech companies reportedly use to suppress posts containing keywords related to Palestine or Gaza. This allows activists to signal solidarity and resistance across language and culture, reaching audiences despite platform restrictions.</p>
+  </div>
+
+  <div class="container">
+ <div class="disclaimer">
+        This experimental translator was created by Master’s students in Information Design at DAE. It analyzes the relationship between emojis and words based on the 1,000 most recent posts (as of 30/04/2025) related to 🍉 Palestine. Designed to explore media activism, censorship, and online resistance, the website provides only a partial view due to the limited dataset.
+      </div>
+    <div class="history-column">
+      <h3>History</h3>
+      <p>🍉 has evolved into a powerful symbol of Palestinian resistance, starting as physical displays in response to oppressive measures to its digital adoption as an emoji, ingeniously bypassing online censorship efforts. This transformation highlights the adaptability of symbolic communication in the face of restrictions on expression, allowing solidarity and national identity to persist and spread.</p>
+      <p>The fruit's significance is rooted in its connection to the colors of the Palestinian flag and its resilient nature, making it a powerful emblem in challenging times.</p>
+      <p>The symbolism of 🍉 began after the 1967 Six-Day War, when the Israeli government restricted displays of the Palestinian flag—red, green, black, and white—in Gaza and the West Bank. This crackdown included actions like shutting down an art gallery in Ramallah in 1980, with an Israeli officer reportedly stating that even art using the forbidden colors, like a watermelon, was prohibited.</p>
+      <p>In defiance, some people started using the 🍉's imagery or carrying the fruit itself in public, as its colors mirrored the banned flag: red pulp, green and white rind, and black seeds. This act served as a form of protest and a way to express Palestinian identity and resistance.</p>
+      <p>🍉 saw a resurgence in 2023, particularly after Israel's National Security Minister banned Palestinian flags in public places, prompting activists to use watermelon stickers as a form of opposition.</p>
+      <p>In 2023, social media became a crucial space for sharing information about the most recent Gaza conflict, but it also experienced significant censorship aimed at suppressing Palestinian narratives. To navigate these restrictions, activists turned to unconventional communication methods, transforming ordinary symbols like emojis into powerful tools.</p>
+      <p>🍉 gained profound meaning, used to represent the colors of the Palestinian flag and the resilience of Gaza citizens. The shift to using this emoji online was a deliberate strategy to circumvent censorship and shadow banning on platforms such as TikTok, Instagram, and Facebook.</p>
+      <p>Advocates suggest that employing emojis like 🍉 may confuse algorithms that tech companies reportedly use to suppress posts containing keywords related to Palestine or Gaza. This allows activists to signal solidarity and resistance across language and culture, reaching audiences despite platform restrictions.</p>
+    </div>
+
+    <div class="main-column">
+      <h2>🍉</h2>
+      <p class="description">The watermelon has become a powerful symbol of Palestinian resistance, evolving from a physical display against oppression to a digital icon used to bypass online censorship. Its colors mirror those of the Palestinian flag, and its resilient nature makes it a fitting emblem of solidarity and national identity in the face of adversity. This translation tool is designed to help you engage in protests and amplify your message effectively. By focusing on emojis as symbols of resistance and community, it helps you find the most impactful combinations to express your cause. Take a moment to reflect on and share your thoughts about this movement.
+</p>
+      <textarea id="inputText" placeholder="Type your message..."></textarea><br>
+      <button onclick="translateText()">Translate</button>
+      
+      <div id="outputContainer" class="output-container">
+        <p>Translated Text:</p>
+        <p id="outputText"></p>
+      </div>
+      
+      <div id="historyContainer" style="display:none;">
+        <h3>Translation History:</h3>
+        <ul id="historyList"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleMobileHistory() {
+      const modal = document.getElementById('mobileHistoryModal');
+      modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+    }
+
+    const wordToEmojis = {};
+
+    function addMapping(word, emoji) {
+      word = word.toLowerCase().trim();
+      if (!wordToEmojis[word]) wordToEmojis[word] = [];
+      if (!wordToEmojis[word].includes(emoji)) wordToEmojis[word].push(emoji);
+    }
+
+    const synonyms = {
+      "children": ["kids", "child"],
+      "freedom": ["liberty", "independence"],
+      "protest": ["march", "demonstration"],
+      "help": ["aid", "assist"],
+      "justice": ["fairness"],
+      "blood": ["bleeding"],
+      "violence": ["aggression"]
+    };
+
+    const instaEmojisWords = {
+  "🍉": ["palestine", "gaza", "freepalestine", "palestina", "watermelon"],
+  "🟥⬛⬜🟩": ["idf", "gaza", "remember", "see", "before", "savepalestine", "freepalestine", "freepalestina", "stopbombinggaza", "savegazachildren", "save", "children"],
+  "❤️": ["palestine", "freepalestine", "gaza", "savepalestine", "freepalestina", "save"],
+  "🕊️": ["freepalestine", "justiceforpalestine", "palestinebleedswhiletheworldremainssilent", "palestinelivesmatter", "justice", "free"],
+  "🤍": ["freepalestine", "savepalestine", "gaza", "freepalestina", "palestine", "save", "free"],
+  "💔": ["help", "gaza", "please", "palestine", "children"],
+  "❤": ["baby", "sweetheart", "story", "son"],
+  "🚨": ["march", "prisoners", "stopbombinggaza", "stop"],
+  "‼️": ["march", "palestine", "us"],
+  "💚": ["savepalestine", "freepalestine", "freepalestina", "stopbombinggaza", "savegazachildren", "save", "children"],
+  "🖤": ["savepalestine", "freepalestine", "freepalestina", "gaza", "stopbombinggaza", "stopbombing", "save", "children"],
+  "🤙🏾": ["art", "politics", "post", "production"],
+  "🤲": ["palestino", "allah"],
+  "❤️‍🩹": ["viral", "help", "children", "please"],
+  "🌙": ["ramadan", "free"],
+  "🤲🏻": ["us", "allah", "palestine", "place", "world"],
+  "😭": ["help", "gaza", "children", "please", "hypocrisy"],
+  "💗": ["palestinian", "children", "day", "april"],
+  "♥️": ["self", "free", "children", "save"],
+  "🔗": ["help", "food", "support"],
+  "🙏": ["please", "help", "self", "family", "praying"],
+  "✊": ["palestine", "protest", "power", "human", "rights"],
+  "💜": ["smile", "family"],
+  "✅": ["contact", "us", "social", "media", "hack"],
+  "💯": ["contact", "us", "social", "media", "hack"],
+  "🗝️": ["arte", "poesía", "poetry", "resistance", "power", "right", "Gaza"],
+  "💞": ["women", "community", "free"],
+  "🥰": ["baby", "sweetheart", "watermelon", "bismillah", "story"],
+  "🌟": ["women", "community", "children", "take", "family", "families"],
+  "🕊": ["palestinian", "children", "day", "april", "palestine"],
+  "🌷": ["palestine", "day", "palestinian", "children", "april"],
+  "📌": ["west", "bank"],
+  "✍🏽": ["arte", "artist", "comics", "poesía"],
+  "❗": ["repost", "finally"],
+  "⭕": ["movement", "people"],
+  "⚪": ["injuries", "martyrs", "documented", "death"],
+  "☝🏼": ["must"]
+};
+    const xEmojisWords = {
+  "🍉": ["palestine", "free"],
+  "❤️🖤🤍💚": ["palestine", "free", "solidarity", "savepalestine", "freepalestine", "freepalestina", "stopbombinggaza", "savegazachildren", "save", "children"],
+  "🙏": ["free", "solidarity"],
+  "💔": ["free", "solidarity"],
+  "🕊️": ["free", "please", "help"],
+  "💚": ["praying", "safety"],
+  "🖤": ["praying", "safety"],
+  "🤍": ["praying", "safety"],
+  "✌️": ["ceasefire"],
+  "❤️": ["free"],
+  "♥️": ["free"],
+  "☮️": ["ceasefire"],
+  "🙏🏻": ["ceasefire"],
+  "🔗": ["www", "youtube", "watch"],
+  "😭": ["earthlykisssed", "children", "ceasefire"],
+  "✊": ["freepalestine", "palestine", "ceasefire"],
+  "✌": ["free"],
+  "👞": ["children", "palestine"],
+  "🪄": ["children"],
+  "🪑": ["children", "palestine"],
+  "🥀": ["together"],
+  "✌🏼": ["free"],
+  "🗓️": ["flags", "peace", "week"],
+  "❤": ["doctoriaindarcy", "free"],
+  "🕊": ["palestine", "everything", "forgive"],
+  "🫶": ["free", "please", "everyone", "share"],
+  "🫂": ["please", "everyone", "share", "donate", "free"],
+  "✌🏻": ["thank", "us", "strength", "gaza", "free"],
+  "🗝️": ["climate", "action", "support", "vote", "voting"],
+  "🧶": ["free", "river", "sea"],
+  "💟": ["free"],
+  "‼️": ["together"],
+  "🌹": ["live", "palestine", "gaza", "place", "want"],
+  "🖐🏼": ["free"],
+  "🏴": ["free"],
+  "✋🏽": ["free", "palestine", "pass"],
+  "👍": ["free", "pass"],
+  "🧷": ["free"],
+  "🙏🏽": ["free"],
+  "🫒": ["free", "palestine"],
+  "🍊": ["free", "palestine"],
+  "👍🏻": ["free", "see"],
+  "🎑": ["goodnight"],
+  "🎐": ["goodnight"],
+  "👏🏼": ["powerful", "words"],
+  "📻": ["radio"],
+  "🥰": ["palestine"],
+  "🧵": ["forget", "kids", "palestine"],
+  "💪": ["palestine", "belongs", "palestinians", "forever"]
+};
+
+    for (const [emoji, words] of Object.entries(instaEmojisWords)) {
+      words.forEach(word => addMapping(word, emoji));
+    }
+    for (const [emoji, words] of Object.entries(xEmojisWords)) {
+      words.forEach(word => addMapping(word, emoji));
+    }
+
+function getEmoji(word) {
+  const lower = word.toLowerCase();
+
+  // 1. Exact match
+  if (wordToEmojis[lower]) return wordToEmojis[lower];
+
+  // 2. Synonym match
+  for (let key in synonyms) {
+    if (synonyms[key].includes(lower)) {
+      return wordToEmojis[key] || [];
+    }
+  }
+
+  // 3. Mild fuzzy matching (distance of exactly 1 only)
+  let bestMatch = null;
+  for (let known of Object.keys(wordToEmojis)) {
+    let dist = levenshteinDistance(known, lower);
+    if (dist === 1) {
+      bestMatch = known;
+      break;
+    }
+  }
+
+  return bestMatch ? wordToEmojis[bestMatch] : [];
+}
+
+    function levenshteinDistance(a, b) {
+      const dp = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
+      for (let i = 0; i <= a.length; i++) dp[i][0] = i;
+      for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+      for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+          dp[i][j] = a[i - 1] === b[j - 1]
+            ? dp[i - 1][j - 1]
+            : 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
+        }
+      }
+      return dp[a.length][b.length];
+    }
+
+    function translateText() {
+      const inputField = document.getElementById("inputText");
+      const outputField = document.getElementById("outputText");
+      const historyList = document.getElementById("historyList");
+      const outputContainer = document.getElementById("outputContainer");
+      const historyContainer = document.getElementById("historyContainer");
+
+      let text = inputField.value.trim();
+      if (!text) return;
+
+      // Show output container and history container if they're hidden
+      outputContainer.style.display = "block";
+      historyContainer.style.display = "block";
+
+      const sentences = text.match(/[^.!?]+[.!?]?/g) || [];
+      const translatedSentences = sentences.map(sentence => {
+        let translated = sentence.split(/\s+/).map(wordWithPunctuation => {
+          const match = wordWithPunctuation.match(/^(\W*)([\w\-]+)(\W*)$/);
+          if (!match) return wordWithPunctuation;
+
+          const [, leading, word, trailing] = match;
+          const emojiList = getEmoji(word);
+          if (emojiList.length > 0) {
+            const emoji = emojiList[Math.floor(Math.random() * emojiList.length)];
+            return leading + emoji + trailing;
+          }
+          return wordWithPunctuation;
+        }).join(" ");
+
+        if (sentence.toLowerCase().includes("free")) {
+          translated = translated.trim() + " ❤️";
+        }
+
+        return translated;
+      });
+
+      const finalTranslation = translatedSentences.join(" ");
+      outputField.innerText = finalTranslation;
+
+      const listItem = document.createElement("li");
+      listItem.textContent = `Original: "${text}" → Translated: "${finalTranslation}"`;
+      historyList.prepend(listItem);
+    }
+  </script>
+</body>
+</html>
