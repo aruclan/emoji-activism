@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BLM Emoji Translator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+  :root {
+    --bg-primary: #ffffff;          /* Sfondo principale */
+    --text-primary: #1a1a1a;        /* Testo principale */
+    --bg-secondary: #ffffff;        /* Sfondo secondario (stesso del primario) */
+    --border-color: #000;           /* Colore dei bordi */
+    --shadow-light: rgba(0, 0, 0, 0.05);
+    --shadow-medium: rgba(0,0,0,0.1);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background-color: var(--bg-primary);   /* Sfondo della pagina */
+    color: var(--text-primary);            /* Colore del testo */
+    font-family: 'Inter', sans-serif;      /* Font principale */
+    line-height: 1.7;                      /* Spaziatura del testo */
+    display: flex;                         /* Layout flex orizzontale */
+    min-height: 100vh;                     /* Altezza minima intera finestra */
+  }
+
+  .container {
+    display: flex;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .history-column {
+    position: fixed;                         /* Colonna fissa a sinistra */
+    top: 0;
+    left: 0;
+    width: 35%;                              /* 35% della larghezza dello schermo */
+    height: 100vh;                           /* Altezza piena della finestra */
+    padding: 20px;
+    background-color: var(--bg-secondary);
+    border-right: 0.5px solid var(--border-color);
+    overflow-y: auto;                        /* Scroll se contenuto lungo */
+    font-size: 0.9rem;
+    line-height: 1.6;
+    z-index: 10;
+  }
+
+  .history-column h3 {
+    margin: 0;
+    top: 0;
+    position: sticky;
+    font-size: 20px;
+    font-weight: 350;
+    background-color: var(--bg-secondary);
+    padding: 10px 0;
+    border-bottom: 0.5px solid var(--border-color); /* Linea sotto il titolo */
+    z-index: 1;
+  }
+
+  .disclaimer {
+    position: fixed;                         /* Box fisso in alto */
+    top: 0;
+    left: 35%;                               /* Inizia dove finisce history-column */
+    width: 65%;
+    font-size: 12px;                         /* Dimensione maggiore richiesta */
+    line-height: 1.3;
+    padding: 12px 15px;
+    color: #000;
+    font-weight: 300;
+    text-align: left;                       /* Allineamento a destra richiesto */
+    background-color: var(--bg-secondary);
+    z-index: 12;
+    border-bottom: 0.45px solid var(--border-color); /* Linea sotto il disclaimer */
+  }
+
+  .main-column {
+    width: 60%;
+    margin-left: 40%;                        /* Distanza dalla sinistra per non sovrapporsi */
+    padding: 100px 20px 60px;
+    text-align: center;
+  }
+
+  .mobile-btn {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    background-color: #fff;
+    color: #000;
+    border: 0.5px solid var(--border-color);
+    padding: 10px 15px;
+    border-radius: 999px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .mobile-btn:hover {
+    background-color: #000;
+    color: #fff;
+  }
+
+  .mobile-history-btn {
+    top: 10px;
+    left: 10px;
+  }
+
+  .mobile-disclaimer-btn {
+    top: 10px;
+    right: 10px;
+  }
+
+  .mobile-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-secondary);
+    z-index: 2000;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  .mobile-modal h3 {
+    font-size: 1.4rem;
+    font-weight: 400;
+    margin-bottom: 20px;
+  }
+
+  .modal-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #fff;
+    color: #000;
+    border: 0.5px solid var(--border-color);
+    padding: 8px 20px;
+    border-radius: 999px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .modal-close-btn:hover {
+    background-color: #000;
+    color: #fff;
+  }
+
+  h2 {
+    font-size: 8rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+
+  .description {
+    font-size: 1.1rem;
+    line-height: 1.4;
+    max-width: 700px;
+    margin: 0 auto 15px;
+  }
+
+  textarea {
+    width: 100%;
+    max-width: 700px;
+    height: 160px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    padding: 16px;
+    margin-top: 20px;
+    border: 0.5px solid var(--border-color);
+    background: var(--bg-secondary);
+    border-radius: 12px;
+  }
+
+  button {
+    background-color: #fff;
+    color: #000;
+    border: 0.5px solid var(--border-color);
+    padding: 14px 40px;
+    font-size: 1rem;
+    margin-top: 25px;
+    cursor: pointer;
+    border-radius: 999px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  button:hover {
+    background-color: #000;
+    color: #fff;
+  }
+
+  .output-container {
+    display: none;
+    margin-top: 30px;
+  }
+
+  #outputText {
+    font-size: 1.25rem;
+    font-style: italic;
+    padding: 15px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 0.5px solid var(--border-color);
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    max-width: 700px;
+    margin: 40px auto 0;
+    text-align: left;
+  }
+
+  li {
+    margin-bottom: 15px;
+    font-size: 1rem;
+    border-bottom: 0.5px solid var(--border-color);
+    padding-bottom: 10px;
+  }
+
+  #historyContainer {
+    margin-top: 30px;
+  }
+
+  @media (max-width: 1024px) {
+    h2 {
+      font-size: 6rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+    }
+
+    .history-column, .disclaimer {
+      display: none;
+    }
+
+    .main-column {
+      width: 100%;
+      margin-left: 0;
+      padding-top: 60px;
+    }
+
+    .mobile-btn {
+      display: block;
+    }
+
+    h2 {
+      font-size: 5rem;
+    }
+
+    .description {
+      font-size: 1rem;
+      padding: 0 15px;
+    }
+
+    textarea {
+      max-width: 95%;
+    }
+
+    #outputText {
+      max-width: 95%;
+    }
+
+    ul {
+      max-width: 95%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    h2 {
+      font-size: 4rem;
+    }
+
+    button {
+      padding: 12px 30px;
+      font-size: 0.9rem;
+    }
+
+    .mobile-btn {
+      padding: 8px 12px;
+      font-size: 0.85rem;
+    }
+  }
+</style>
+
+</head>
+<body>
+  <button class="mobile-btn mobile-history-btn" onclick="toggleMobileModal('mobileHistoryModal')">History</button>
+  <button class="mobile-btn mobile-disclaimer-btn" onclick="toggleMobileModal('mobileDisclaimerModal')">Disclaimer</button>
+
+  <div class="mobile-modal" id="mobileHistoryModal">
+    <h3>History</h3>
+    <button class="modal-close-btn" onclick="toggleMobileModal('mobileHistoryModal')">Close</button>
+    <p>✊🏿 has evolved into a powerful symbol of Black resistance and solidarity. The raised black fist represents strength, unity, and the fight against racism, becoming one of the most recognizable emblems of the Black Lives Matter movement.</p>
+    <p>The symbol's significance is rooted in its connection to Black Power activism dating back to the 1960s and 1970s, representing resilience in the face of oppression and systemic racism.</p> 
+    <p>In the digital age, emojis have become powerful tools for activism. They allow people to express solidarity across language barriers and can sometimes bypass algorithmic censorship on social media platforms.</p>
+    <p>Activists often use specific emojis to signal support for causes without explicitly mentioning keywords that might be downranked by algorithms, allowing messages to reach wider audiences despite platform moderation.</p>
+    <p>This evolution from physical gesture to digital symbol demonstrates the adaptability of protest language in the face of new communication challenges, ensuring that messages of solidarity and demands for justice continue to spread effectively online.</p>
+  </div>
+
+  <div class="mobile-modal" id="mobileDisclaimerModal">
+    <h3>Disclaimer</h3>
+    <button class="modal-close-btn" onclick="toggleMobileModal('mobileDisclaimerModal')">Close</button>
+    <p>This experimental translator was created by Master's students in Information Design at DAE. It analyzes the relationship between emojis and words based on data collected from social media posts related to Black Lives Matter. Designed to explore media activism, censorship, and online resistance, the website provides only a partial view due to the limited dataset.</p>
+  </div>
+
+  <div class="container">
+    <div class="disclaimer">
+        This experimental translator was created by Master's students in Information Design at DAE. It analyzes the relationship between emojis and words based on data collected from social media posts related to Black Lives Matter. Designed to explore media activism, censorship, and online resistance, the website provides only a partial view due to the limited dataset.
+    </div>
+    <div class="history-column">
+      <h3>History</h3>
+      <p>✊🏿 has evolved into a powerful symbol of Black resistance and solidarity. The raised black fist represents strength, unity, and the fight against racism, becoming one of the most recognizable emblems of the Black Lives Matter movement.</p>
+      <p>The symbol's significance is rooted in its connection to Black Power activism dating back to the 1960s and 1970s, representing resilience in the face of oppression and systemic racism.</p> 
+      <p>In the digital age, emojis have become powerful tools for activism. They allow people to express solidarity across language barriers and can sometimes bypass algorithmic censorship on social media platforms.</p>
+      <p>Activists often use specific emojis to signal support for causes without explicitly mentioning keywords that might be downranked by algorithms, allowing messages to reach wider audiences despite platform moderation.</p>
+      <p>This evolution from physical gesture to digital symbol demonstrates the adaptability of protest language in the face of new communication challenges, ensuring that messages of solidarity and demands for justice continue to spread effectively online.</p>
+    </div>
+
+    <div class="main-column">
+      <h2>✊🏿</h2>
+      <p class="description">The raised fist has become a powerful symbol of Black resistance and solidarity, evolving from a physical gesture against oppression to a digital icon used to express support for racial justice. The black fist emoji represents strength, unity, and the ongoing fight against systemic racism. This translation tool is designed to help you engage in digital activism and amplify your message effectively. By focusing on emojis as symbols of resistance and community, it helps you find the most impactful combinations to express your cause.
+</p>
+      <textarea id="inputText" placeholder="Type your message..."></textarea><br>
+      <button onclick="translateText()">Translate</button>
+      
+      <div id="outputContainer" class="output-container">
+        <p>Translated Text:</p>
+        <p id="outputText"></p>
+      </div>
+      
+      <div id="historyContainer" style="display:none;">
+        <h3>Translation History:</h3>
+        <ul id="historyList"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleMobileModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+    }
+
+    const wordToEmojis = {};
+
+    function addMapping(word, emoji) {
+      word = word.toLowerCase().trim();
+      if (!wordToEmojis[word]) wordToEmojis[word] = [];
+      if (!wordToEmojis[word].includes(emoji)) wordToEmojis[word].push(emoji);
+    }
+
+    const synonyms = {
+      "black": ["african", "afro", "afroamerican", "afroamericans"],
+      "lives": ["life"],
+      "matter": ["importance", "significant"],
+      "racism": ["discrimination", "prejudice", "bigotry"],
+      "rights": ["freedoms", "liberties", "entitlements"],
+      "blm": ["blacklivesmatter", "black lives matter"],
+      "police": ["cops", "officer", "officers"],
+      "equality": ["equity", "fairness", "equal"],
+      "justice": ["fairness"],
+      "resistance": ["protest", "opposition"],
+      "solidarity": ["support", "unity", "together"]
+    };
+
+    const blmEmojisWords = {
+      "✊🏿": ["racism", "blacklivesmatter", "blm", "rights", "black", "lives", "matter"],
+      "🐐": ["blk", "brand", "family", "us"],
+      "🖤": ["blk", "brand", "family", "resistance", "black", "lives", "matter"],
+      "✊🏿✊🏾✊🏽✊🏼✊🏻": ["blacklivesmatter", "blm", "racismo", "black", "lives", "matter"],
+      "🤎": ["education", "politics", "equality"],
+      "✊": ["blacklivesmatter", "black", "lives", "matter"],
+      "💯": ["us"],
+      "❤️": ["anti-racist", "tipos", "blm", "solidarity"],
+      "🔥": ["blk", "brand", "family", "power", "resist"],
+      "👏🏿": ["racism", "opposing", "resisting"],
+      "🎯": ["blk", "brand", "us"],
+      "👏": ["blk", "brand", "us", "family"],
+      "☑️": ["anti-racist", "racism"],
+      "🏳️‍🌈": ["law", "trans", "lgbtq+", "lgbt", "queer"],
+      "💙": ["explorepage", "likeandcomment", "followformore", "explore", "like", "comment", "follow", "share", "page", "link"],
+      "🧡": ["education", "politics", "equality"],
+      "👊🏾": ["blk", "brand", "family", "us"],
+      "👑": ["racism", "society"],
+      "📸": ["racism", "picture", "photo", "share"],
+      "👏🏽": ["racism", "news", "police"],
+      "👀": ["racial", "racismo"],
+      "🙏": ["heard", "black", "lives", "matter"],
+      "🙏🏽": ["police", "georgefloyd", "ripgeorgefloyd", "may", "death", "george", "floyd", "rip"],
+      "⚫": ["anti-racist", "racism"],
+      "💪🏿": ["preconceito", "for", "power", "resisting", "protesting"],
+      "📌": ["uteroancestral", "save"],
+      "🙄": ["employment", "train", "coming", "work", "bypassed"],
+      "✨": ["viral", "last"],
+      "✅": ["we", "are", "all"],
+      "👊🏿": ["preconceito", "power", "lives", "rebel", "protect"],
+      "♥️": ["heard", "black", "lives", "matter"],
+      "🌹": ["police", "georgefloyd", "ripgeorgefloyd", "may", "death", "george", "floyd", "rip"],
+      "❗": ["police", "georgefloyd", "ripgeorgefloyd", "may", "death", "george", "floyd", "rip", "emergency", "notice", "check"],
+      "🕊": ["police", "georgefloyd", "ripgeorgefloyd", "may", "death", "george", "floyd", "rip", "peace"],
+      "🤍": ["police", "georgefloyd", "ripgeorgefloyd", "may", "death", "george", "floyd", "rip", "peace"],
+      "💈": ["black", "power", "onlyclassicnoshit", "classicneverdie", "blackpower"],
+      "⚪": ["black", "counsciousness", "celebrate"],
+      "💚": ["never", "over"],
+      "💜": ["never", "over"],
+      "🎉": ["us"],
+      "🙏🏿": ["truth", "blackpower", "born", "abolitionist"],
+      "😱": ["law", "trans", "change", "dangerous", "new"],
+      "🤬": ["law", "trans", "change", "dangerous", "new"],
+      "🏳‍⚧": ["law", "trans", "change", "dangerous", "new"],
+      "👇🏽": ["now", "see", "check"],
+      "🫱🏼‍🫲🏾": ["education", "politics", "equality"],
+      "✌🏾": ["education", "politics", "equality"],
+      "😁": ["education", "politics", "equality"],
+      "💗": ["education", "politics", "equality"],
+      "🐈‍⬛": ["juneteenth", "please", "black", "lives", "matter"],
+      "🐕‍🦺": ["juneteenth", "please", "black", "lives", "matter"],
+      "🥺": ["sadness", "beautifuò"],
+      "🙏🏾": ["police", "georgefloyd", "ripgeorgefloyd", "may", "death", "rip", "george", "floyd"],
+      "😔": ["police", "georgefloyd", "ripgeorgefloyd", "may", "death", "rip", "george", "floyd"],
+      "📚": ["let", "read", "honest", "black", "women"],
+      "❌": ["never", "stop"],
+      "🔴": ["black", "counsciousness", "celebrate"],
+      "🔵": ["black", "counsciousness", "celebrate"],
+      "📷": ["expression", "black"],
+      "🙌🏿": ["black", "counsciousness", "celebrate"],
+      "🤷🏿‍♂️": ["know", "hit", "link", "bio", "get"],
+      "🫶🏽": ["back", "school", "explorepage", "likeandcomment", "followformore", "like", "share", "commet", "follow"],
+      "💩": ["employment", "train", "coming", "work", "bypassed"],
+      "🕳️": ["employment", "train", "coming", "work", "bypassed"],
+      "💪🏾": ["never", "over"],
+      "🫱🏾‍🫲🏼": ["never", "over"],
+      "🩵": ["never", "over"],
+      "🩶": ["never", "over"],
+      "🎭": ["never", "over"],
+      "🎟️": ["never", "over"],
+      "🐾": ["find", "reason"],
+      "🌱": ["find", "reason"],
+      "🌍": ["find", "reason"],
+      "😍": ["find", "reason"],
+      "🤸🏿": ["forced", "meta"],
+      "🫱🏿‍🫲🏻": ["heart", "until"],
+      "🌟": ["appreciate"],
+      "🚶": ["selma", "relived", "civil", "rights", "march"],
+      "🚶🏾": ["selma", "relived", "civil", "rights", "march"],
+      "🌉": ["selma", "relived", "civil", "rights", "march"],
+      "⛓️": ["selma", "relived", "civil", "rights", "march"],
+      "🤔": ["slavery", "way", "reparations", "born", "around"],
+      "☺️": ["contra", "racial", "dia", "luta", "racism", "against"],
+      "🚨": ["contra", "racial", "dia", "luta", "racism", "against"],
+      "💇🏿‍♂️": ["um", "para", "black", "que", "power", "for"]
+    };
+
+    for (const [emoji, words] of Object.entries(blmEmojisWords)) {
+      words.forEach(word => addMapping(word, emoji));
+    }
+
+function getEmoji(word) {
+  const lower = word.toLowerCase();
+
+  // 1. Exact match
+  if (wordToEmojis[lower]) return wordToEmojis[lower];
+
+  // 2. Synonym match
+  for (let key in synonyms) {
+    if (synonyms[key].includes(lower)) {
+      return wordToEmojis[key] || [];
+    }
+  }
+
+  // 3. Mild fuzzy matching (distance of exactly 1 only)
+  let bestMatch = null;
+  for (let known of Object.keys(wordToEmojis)) {
+    let dist = levenshteinDistance(known, lower);
+    if (dist === 1) {
+      bestMatch = known;
+      break;
+    }
+  }
+
+  return bestMatch ? wordToEmojis[bestMatch] : [];
+}
+
+    function levenshteinDistance(a, b) {
+      const dp = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
+      for (let i = 0; i <= a.length; i++) dp[i][0] = i;
+      for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+      for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+          dp[i][j] = a[i - 1] === b[j - 1]
+            ? dp[i - 1][j - 1]
+            : 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
+        }
+      }
+      return dp[a.length][b.length];
+    }
+
+    function translateText() {
+      const inputField = document.getElementById("inputText");
+      const outputField = document.getElementById("outputText");
+      const historyList = document.getElementById("historyList");
+      const outputContainer = document.getElementById("outputContainer");
+      const historyContainer = document.getElementById("historyContainer");
+
+      let text = inputField.value.trim();
+      if (!text) return;
+
+      // Show output container and history container if they're hidden
+      outputContainer.style.display = "block";
+      historyContainer.style.display = "block";
+
+      const sentences = text.match(/[^.!?]+[.!?]?/g) || [];
+      const translatedSentences = sentences.map(sentence => {
+        let translated = sentence.split(/\s+/).map(wordWithPunctuation => {
+          const match = wordWithPunctuation.match(/^(\W*)([\w\-]+)(\W*)$/);
+          if (!match) return wordWithPunctuation;
+
+          const [, leading, word, trailing] = match;
+          const emojiList = getEmoji(word);
+          if (emojiList.length > 0) {
+            const emoji = emojiList[Math.floor(Math.random() * emojiList.length)];
+            return leading + emoji + trailing;
+          }
+          return wordWithPunctuation;
+        }).join(" ");
+
+        if (sentence.toLowerCase().includes("black lives matter") || sentence.toLowerCase().includes("blm")) {
+          translated = translated.trim() + " ✊🏿";
+        }
+
+        return translated;
+      });
+
+      const finalTranslation = translatedSentences.join(" ");
+      outputField.innerText = finalTranslation;
+
+      const listItem = document.createElement("li");
+      listItem.textContent = `Original: "${text}" → Translated: "${finalTranslation}"`;
+      historyList.prepend(listItem);
+    }
+  </script>
+</body>
+</html>
