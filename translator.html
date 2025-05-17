@@ -535,49 +535,60 @@ function getEmoji(word) {
       return dp[a.length][b.length];
     }
 
-    function translateText() {
-      const inputField = document.getElementById("inputText");
-      const outputField = document.getElementById("outputText");
-      const historyList = document.getElementById("historyList");
-      const outputContainer = document.getElementById("outputContainer");
-      const historyContainer = document.getElementById("historyContainer");
+function translateText() {
+  const inputField = document.getElementById("inputText");
+  const outputField = document.getElementById("outputText");
+  const historyList = document.getElementById("historyList");
+  const outputContainer = document.getElementById("outputContainer");
+  const historyContainer = document.getElementById("historyContainer");
 
-      let text = inputField.value.trim();
-      if (!text) return;
+  let text = inputField.value.trim();
+  if (!text) return;
 
-      // Show output container and history container if they're hidden
-      outputContainer.style.display = "block";
-      historyContainer.style.display = "block";
+  outputContainer.style.display = "block";
+  historyContainer.style.display = "block";
 
-      const sentences = text.match(/[^.!?]+[.!?]?/g) || [];
-      const translatedSentences = sentences.map(sentence => {
-        let translated = sentence.split(/\s+/).map(wordWithPunctuation => {
-          const match = wordWithPunctuation.match(/^(\W*)([\w\-]+)(\W*)$/);
-          if (!match) return wordWithPunctuation;
+  // Keywords to replace directly with emojis
+  const directReplace = ["palestine", "palestinian", "palestinians", "gaza"];
 
-          const [, leading, word, trailing] = match;
-          const emojiList = getEmoji(word);
-          if (emojiList.length > 0) {
-            const emoji = emojiList[Math.floor(Math.random() * emojiList.length)];
-            return leading + emoji + trailing;
-          }
-          return wordWithPunctuation;
-        }).join(" ");
+  const sentences = text.match(/[^.!?]+[.!?]?/g) || [];
+  const translatedSentences = sentences.map(sentence => {
+    let emojiSummary = new Set();
 
-        if (sentence.toLowerCase().includes("free")) {
-          translated = translated.trim() + " ❤️";
-        }
+    let translated = sentence.split(/\s+/).map(wordWithPunctuation => {
+      const match = wordWithPunctuation.match(/^(\W*)([\w\-]+)(\W*)$/);
+      if (!match) return wordWithPunctuation;
 
-        return translated;
-      });
+      const [, leading, word, trailing] = match;
+      const lowerWord = word.toLowerCase();
+      const emojis = getEmoji(lowerWord);
 
-      const finalTranslation = translatedSentences.join(" ");
-      outputField.innerText = finalTranslation;
+      if (directReplace.includes(lowerWord) && emojis.length > 0) {
+        const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+        return leading + emoji + trailing;
+      }
 
-      const listItem = document.createElement("li");
-      listItem.textContent = `Original: "${text}" → Translated: "${finalTranslation}"`;
-      historyList.prepend(listItem);
+      if (emojis.length > 0) {
+        emojis.forEach(e => emojiSummary.add(e));
+      }
+
+      return wordWithPunctuation;
+    }).join(" ");
+
+    if (emojiSummary.size > 0) {
+      translated += ` ${[...emojiSummary].join(" ")}`;
     }
+
+    return translated;
+  });
+
+  const finalTranslation = translatedSentences.join(" ");
+  outputField.innerText = finalTranslation;
+
+  const listItem = document.createElement("li");
+  listItem.textContent = `Original: "${text}" → Translated: "${finalTranslation}"`;
+  historyList.prepend(listItem);
+}
   </script>
 </body>
 </html>
