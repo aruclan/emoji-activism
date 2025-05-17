@@ -3,9 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Emoji Translator</title>
+  <title>BLM Emoji Translator</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg-primary: #ffffff;          /* Sfondo principale */
+      --text-primary: #1a1a1a;        /* Testo principale */
+      --bg-secondary: #ffffff;        /* Sfondo secondario (stesso del primario) */
+      --border-color: #000;           /* Colore dei bordi */
+      --shadow-light: rgba(0, 0, 0, 0.05);
+      --shadow-medium: rgba(0,0,0,0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);   /* Sfondo della pagina */
+      color: var(--text-primary);            /* Colore del testo */
+      font-family: 'Inter', sans-serif;      /* Font principale */
+      line-height: 1.7;                      /* Spaziatura del testo */
+      display: flex;                         /* Layout flex orizzontale */
+      min-height: 100vh;                     /* Altezza minima intera finestra */
+    }
+
     .rain-container {
       position: fixed;
       top: 0;
@@ -38,18 +62,366 @@
         opacity: 0;
       }
     }
+
+    .container {
+      display: flex;
+      width: 100%;
+      max-width: 1600px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .history-column {
+      position: fixed;                         /* Colonna fissa a sinistra */
+      top: 0;
+      left: 0;
+      width: 35%;                              /* 35% della larghezza dello schermo */
+      height: 100vh;                           /* Altezza piena della finestra */
+      padding: 20px;
+      background-color: var(--bg-secondary);
+      border-right: 0.5px solid var(--border-color);
+      overflow-y: auto;                        /* Scroll se contenuto lungo */
+      font-size: 0.9rem;
+      line-height: 1.6;
+      z-index: 10;
+    }
+
+    .history-column h3 {
+      margin: 0;
+      top: 0;
+      position: sticky;
+      font-size: 20px;
+      font-weight: 350;
+      background-color: var(--bg-secondary);
+      padding: 10px 0;
+      border-bottom: 0.5px solid var(--border-color); /* Linea sotto il titolo */
+      z-index: 1;
+    }
+
+    .disclaimer {
+      position: fixed;                         /* Box fisso in alto */
+      top: 0;
+      left: 35%;                               /* Inizia dove finisce history-column */
+      width: 65%;
+      font-size: 12px;                         /* Dimensione maggiore richiesta */
+      line-height: 1.3;
+      padding: 12px 15px;
+      color: #000;
+      font-weight: 300;
+      text-align: left;                       /* Allineamento a destra richiesto */
+      background-color: var(--bg-secondary);
+      z-index: 12;
+      border-bottom: 0.45px solid var(--border-color); /* Linea sotto il disclaimer */
+    }
+
+    .main-column {
+      width: 60%;
+      margin-left: 40%;                        /* Distanza dalla sinistra per non sovrapporsi */
+      padding: 100px 20px 60px;
+      text-align: center;
+    }
+
+    .mobile-btn {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      background-color: #fff;
+      color: #000;
+      border: 0.5px solid var(--border-color);
+      padding: 10px 15px;
+      border-radius: 999px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .mobile-btn:hover {
+      background-color: #000;
+      color: #fff;
+    }
+
+    .mobile-history-btn {
+      top: 10px;
+      left: 10px;
+    }
+
+    .mobile-disclaimer-btn {
+      top: 10px;
+      right: 10px;
+    }
+
+    .mobile-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-secondary);
+      z-index: 2000;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .mobile-modal h3 {
+      font-size: 1.4rem;
+      font-weight: 400;
+      margin-bottom: 20px;
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #fff;
+      color: #000;
+      border: 0.5px solid var(--border-color);
+      padding: 8px 20px;
+      border-radius: 999px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close-btn:hover {
+      background-color: #000;
+      color: #fff;
+    }
+
+    h2 {
+      font-size: 8rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      margin-top: 10px;
+    }
+
+    .description {
+      font-size: 1rem;
+      line-height: 1.5;
+      max-width: 700px;
+      margin: 0 auto 15px;
+      padding: 0 10px;
+    }
+
+    @media (max-width: 768px) {
+      .description {
+        font-size: 0.9rem;
+        line-height: 1.4;
+        padding: 0 15px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .description {
+        font-size: 0.8rem;
+        line-height: 1.3;
+        padding: 0 12px;
+      }
+    }
+
+    textarea {
+      width: 100%;
+      max-width: 700px;
+      height: 160px;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      padding: 16px;
+      margin-top: 20px;
+      border: 0.5px solid var(--border-color);
+      background: var(--bg-secondary);
+      border-radius: 12px;
+    }
+
+    button {
+      background-color: #fff;
+      color: #000;
+      border: 0.5px solid var(--border-color);
+      padding: 14px 40px;
+      font-size: 1rem;
+      margin-top: 25px;
+      cursor: pointer;
+      border-radius: 999px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #000;
+      color: #fff;
+    }
+
+    .output-container {
+      display: none;
+      margin-top: 30px;
+    }
+
+    #outputText {
+      font-size: 1.25rem;
+      font-style: italic;
+      padding: 15px;
+      background: var(--bg-secondary);
+      border-radius: 10px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      border: 0.5px solid var(--border-color);
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      max-width: 700px;
+      margin: 40px auto 0;
+      text-align: left;
+    }
+
+    li {
+      margin-bottom: 15px;
+      font-size: 1rem;
+      border-bottom: 0.5px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    #historyContainer {
+      margin-top: 30px;
+    }
+
+    @media (max-width: 1024px) {
+      h2 {
+        font-size: 6rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .history-column, .disclaimer {
+        display: none;
+      }
+
+      .main-column {
+        width: 100%;
+        margin-left: 0;
+        padding-top: 60px;
+      }
+
+      .mobile-btn {
+        display: block;
+      }
+
+      h2 {
+        font-size: 5rem;
+      }
+
+      .description {
+        font-size: 1rem;
+        padding: 0 15px;
+      }
+
+      textarea {
+        max-width: 95%;
+      }
+
+      #outputText {
+        max-width: 95%;
+      }
+
+      ul {
+        max-width: 95%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h2 {
+        font-size: 4rem;
+      }
+
+      button {
+        padding: 12px 30px;
+        font-size: 0.9rem;
+      }
+
+      .mobile-btn {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="rain-container" id="rainContainer"></div>
+  
+  <button class="mobile-btn mobile-history-btn" onclick="toggleMobileModal('mobileHistoryModal')">History</button>
+  <button class="mobile-btn mobile-disclaimer-btn" onclick="toggleMobileModal('mobileDisclaimerModal')">About the Data</button>
+
+  <div class="mobile-modal" id="mobileHistoryModal">
+    <h3>History</h3>
+    <button class="modal-close-btn" onclick="toggleMobileModal('mobileHistoryModal')">Close</button>
+    <p>The Raised Fist is an iconic and nomadic symbol that has been widely reproduced and reused across different movements and contexts for over a century. Its familiarity and mobility across causes have made it one of the most enduring political icons of our time.</p>
+    <p>The Raised Fist emoji was approved as part of Unicode 6.0 in 2010 and added to Emoji 1.0 in 2015. Since then, it has been widely used in digital communication to express resistance, solidarity, and defiance. The emoji gained particular prominence during the Black Lives Matter protests in 2020, following the global outcry over the death of George Floyd.</p> 
+    <p>As a digital extension of the physical gesture, the emoji allows people to participate in conversations about social justice, show solidarity, and sometimes even bypass social media algorithms. Its recognizability and emotional weight make it a powerful tool in digital activism, enabling users to quickly and effectively signal support for a range of causes related to justice and human rights.</p>
+    <p>Just like its physical counterpart, the raised fist emoji has become a universal symbol of resistance in the digital age—continuing and amplifying the legacy of one of history's most enduring symbols of defiance and hope.</p>
+    <p>The raised fist emoji ✊🏿 has its roots in a long tradition of the raised fist symbol, which has represented solidarity, resistance, and the fight against oppression since the early 20th century. </p>
+    <p>Over the decades, the symbol gained prominence in various social and political movements, including labor unions, anti-fascist groups, civil rights campaigns, and feminist organizations.
+Historically, trade unions as well as socialist and communist parties adopted the raised fist. It was later embraced by anti-fascist movements between the world wars and by pan-African, anti-colonial, and anti-apartheid movements. In more recent history, it has been used by the Black Power movement, Women's Liberation, and Gay Liberation.</p>
+    <p>When associated with Black Power and anti-racist struggles, the raised fist is often referred to as the "Black Power salute" or "Black Power fist." Building on its strong connection to Black political resistance since the mid-20th century, the raised fist is now most closely associated with the Black Lives Matter movement—especially following the widespread demonstrations and social media activism in 2020 after the police murder of George Floyd.</p>
+    <p>However, it is important to emphasize that no single movement or cause can claim exclusive ownership of the raised fist. Its recurring use across different times, regions, and political struggles highlights both its adaptability and symbolic longevity. The power of the raised fist lies precisely in this flexibility—its capacity to be recognized and repurposed by various groups seeking justice.</p>
+    <p>The raised fist is a visual symbol used globally by a wide array of social movements and political organizations. It manifests either as a physical gesture—an arm raised with a clenched fist—or as a graphic icon appearing on posters, placards, street art, pamphlets, badges, and clothing. Like all symbols, it conveys abstract ideas—most notably resistance. It also embodies the concept of "power from below" and the solidarity of people united in political struggle. As a result, the raised fist is commonly associated with democratic movements and popular uprisings against oppression.</p>
+  </div>
+
+  <div class="mobile-modal" id="mobileDisclaimerModal">
+    <h3>About the Data</h3>
+    <button class="modal-close-btn" onclick="toggleMobileModal('mobileDisclaimerModal')">Close</button>
+    <p>This experimental translator was created by Master's students in Information Design at DAE. It analyzes the relationship between emojis and words based on data collected from social media posts related to ✊🏿 Black Lives Matter. Designed to explore media activism, censorship, and online resistance, the website provides only a partial view due to the limited dataset.</p>
+  </div>
+
+  <div class="container">
+    <div class="disclaimer">
+      This experimental translator was created by Master's students in Information Design at DAE. It analyzes the relationship between emojis and words based on data collected from social media posts related to Black Lives Matter. Designed to explore media activism, censorship, and online resistance, the website provides only a partial view due to the limited dataset.
+    </div>
+    
+    <div class="history-column">
+      <h3>History</h3>
+      <p>The Raised Fist is an iconic and nomadic symbol that has been widely reproduced and reused across different movements and contexts for over a century. Its familiarity and mobility across causes have made it one of the most enduring political icons of our time.</p>
+      <p>The Raised Fist emoji was approved as part of Unicode 6.0 in 2010 and added to Emoji 1.0 in 2015. Since then, it has been widely used in digital communication to express resistance, solidarity, and defiance. The emoji gained particular prominence during the Black Lives Matter protests in 2020, following the global outcry over the death of George Floyd.</p> 
+      <p>As a digital extension of the physical gesture, the emoji allows people to participate in conversations about social justice, show solidarity, and sometimes even bypass social media algorithms. Its recognizability and emotional weight make it a powerful tool in digital activism, enabling users to quickly and effectively signal support for a range of causes related to justice and human rights.</p>
+      <p>Just like its physical counterpart, the raised fist emoji has become a universal symbol of resistance in the digital age—continuing and amplifying the legacy of one of history's most enduring symbols of defiance and hope.</p>
+      <p>The raised fist emoji ✊🏿 has its roots in a long tradition of the raised fist symbol, which has represented solidarity, resistance, and the fight against oppression since the early 20th century. </p>
+      <p>Over the decades, the symbol gained prominence in various social and political movements, including labor unions, anti-fascist groups, civil rights campaigns, and feminist organizations.
+Historically, trade unions as well as socialist and communist parties adopted the raised fist. It was later embraced by anti-fascist movements between the world wars and by pan-African, anti-colonial, and anti-apartheid movements. In more recent history, it has been used by the Black Power movement, Women's Liberation, and Gay Liberation.</p>
+      <p>When associated with Black Power and anti-racist struggles, the raised fist is often referred to as the "Black Power salute" or "Black Power fist." Building on its strong connection to Black political resistance since the mid-20th century, the raised fist is now most closely associated with the Black Lives Matter movement—especially following the widespread demonstrations and social media activism in 2020 after the police murder of George Floyd.</p>
+      <p>However, it is important to emphasize that no single movement or cause can claim exclusive ownership of the raised fist. Its recurring use across different times, regions, and political struggles highlights both its adaptability and symbolic longevity. The power of the raised fist lies precisely in this flexibility—its capacity to be recognized and repurposed by various groups seeking justice.</p>
+      <p>The raised fist is a visual symbol used globally by a wide array of social movements and political organizations. It manifests either as a physical gesture—an arm raised with a clenched fist—or as a graphic icon appearing on posters, placards, street art, pamphlets, badges, and clothing. Like all symbols, it conveys abstract ideas—most notably resistance. It also embodies the concept of "power from below" and the solidarity of people united in political struggle. As a result, the raised fist is commonly associated with democratic movements and popular uprisings against oppression.</p>
+      <a href="https://collection.theblackarchives.nl/" target="_blank" rel="noopener noreferrer">The Black Archives, </a>
+      <a href="https://uark.libguides.com/c.php?g=1050881&p=7631856" target="_blank" rel="noopener noreferrer">Archiving the Black Lives Matter Movement Project, </a>
+      <a href="https://archive-it.org/collections/4783" target="_blank" rel="noopener noreferrer">Black Lives Matter Web Archive</a>
+    </div>
+
+    <div class="main-column">
+      <h2>✊🏿✊🏾✊🏽✊🏼✊🏻</h2>
+      <p class="description">The raised fist has become a powerful symbol of Black resistance and solidarity, evolving from a physical gesture against oppression to a digital icon used to express support for racial justice. The black fist emoji represents strength, unity, and the ongoing fight against systemic racism. This translation tool is designed to help you engage in digital activism and amplify your message effectively. By focusing on emojis as symbols of resistance and community, it helps you find the most impactful combinations to express your cause.</p>
+      <textarea id="inputText" placeholder="Type your message..."></textarea><br>
+      <button onclick="translateText()">Translate</button>
+      
+      <div id="outputContainer" class="output-container">
+        <p>Translated Text:</p>
+        <p id="outputText"></p>
+      </div>
+      
+      <div id="historyContainer" style="display:none;">
+        <h3>Translation History:</h3>
+        <ul id="historyList"></ul>
+      </div>
+    </div>
+  </div>
 
   <script>
     const emojisFromTranslator = [
       "✊🏿", "🐐", "🖤", "✊🏿✊🏾✊🏽✊🏼✊🏻", "🤎", "✊", "💯", "❤️", "🔥", "👏🏿", "🎯", "👏", "☑️", "🏳️‍🌈", "💙", "🧡", "👊🏾", "👑",
-    "📸", "👏🏽", "👀", "🙏", "🙏🏽", "⚫", "💪🏿", "📌", "🙄", "✨", "✅", "👊🏿", "♥️", "🌹", "❗", "🕊", "🤍", "💈", "⚪", "💚",
-    "💜", "🎉", "🙏🏿", "😱", "🤬", "🏳️‍⚧️", "👇🏽", "🫱🏼‍🫲🏾", "✌🏾", "😁", "💗", "🐈‍⬛", "🐕‍🦺", "🥺", "🙏🏾", "😔", "📚", "❌",
-    "🔴", "🔵", "📷", "🙌🏿", "🤷🏿‍♂️", "🫶🏽", "💩", "🕳️", "💪🏾", "🫱🏾‍🫲🏼", "🩵", "🩶", "🎭", "🎟️", "🐾", "🌱", "🌍", "😍",
-    "🤸🏿", "🫱🏿‍🫲🏻", "🌟", "🚶", "🚶🏾", "🌉", "⛓️", "🤔", "☺️", "🚨", "💇🏿‍♂️"
+      "📸", "👏🏽", "👀", "🙏", "🙏🏽", "⚫", "💪🏿", "📌", "🙄", "✨", "✅", "👊🏿", "♥️", "🌹", "❗", "🕊", "🤍", "💈", "⚪", "💚",
+      "💜", "🎉", "🙏🏿", "😱", "🤬", "🏳️‍⚧️", "👇🏽", "🫱🏼‍🫲🏾", "✌🏾", "😁", "💗", "🐈‍⬛", "🐕‍🦺", "🥺", "🙏🏾", "😔", "📚", "❌",
+      "🔴", "🔵", "📷", "🙌🏿", "🤷🏿‍♂️", "🫶🏽", "💩", "🕳️", "💪🏾", "🫱🏾‍🫲🏼", "🩵", "🩶", "🎭", "🎟️", "🐾", "🌱", "🌍", "😍",
+      "🤸🏿", "🫱🏿‍🫲🏻", "🌟", "🚶", "🚶🏾", "🌉", "⛓️", "🤔", "☺️", "🚨", "💇🏿‍♂️"
     ];
 
     window.addEventListener('load', () => {
@@ -68,398 +440,7 @@
         setTimeout(() => container.removeChild(emoji), 12000);
       }
     });
-  </script>
 
-  <div class="container">
-    <!-- Original translator HTML content should be inserted here -->
-  </div>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BLM Emoji Translator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <style>
-  :root {
-    --bg-primary: #ffffff;          /* Sfondo principale */
-    --text-primary: #1a1a1a;        /* Testo principale */
-    --bg-secondary: #ffffff;        /* Sfondo secondario (stesso del primario) */
-    --border-color: #000;           /* Colore dei bordi */
-    --shadow-light: rgba(0, 0, 0, 0.05);
-    --shadow-medium: rgba(0,0,0,0.1);
-  }
-
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-
-  body {
-    background-color: var(--bg-primary);   /* Sfondo della pagina */
-    color: var(--text-primary);            /* Colore del testo */
-    font-family: 'Inter', sans-serif;      /* Font principale */
-    line-height: 1.7;                      /* Spaziatura del testo */
-    display: flex;                         /* Layout flex orizzontale */
-    min-height: 100vh;                     /* Altezza minima intera finestra */
-  }
-
-  .container {
-    display: flex;
-    width: 100%;
-    max-width: 1600px;
-    margin: 0 auto;
-    position: relative;
-  }
-
-  .history-column {
-    position: fixed;                         /* Colonna fissa a sinistra */
-    top: 0;
-    left: 0;
-    width: 35%;                              /* 35% della larghezza dello schermo */
-    height: 100vh;                           /* Altezza piena della finestra */
-    padding: 20px;
-    background-color: var(--bg-secondary);
-    border-right: 0.5px solid var(--border-color);
-    overflow-y: auto;                        /* Scroll se contenuto lungo */
-    font-size: 0.9rem;
-    line-height: 1.6;
-    z-index: 10;
-  }
-
-  .history-column h3 {
-    margin: 0;
-    top: 0;
-    position: sticky;
-    font-size: 20px;
-    font-weight: 350;
-    background-color: var(--bg-secondary);
-    padding: 10px 0;
-    border-bottom: 0.5px solid var(--border-color); /* Linea sotto il titolo */
-    z-index: 1;
-  }
-
-  .disclaimer {
-    position: fixed;                         /* Box fisso in alto */
-    top: 0;
-    left: 35%;                               /* Inizia dove finisce history-column */
-    width: 65%;
-    font-size: 12px;                         /* Dimensione maggiore richiesta */
-    line-height: 1.3;
-    padding: 12px 15px;
-    color: #000;
-    font-weight: 300;
-    text-align: left;                       /* Allineamento a destra richiesto */
-    background-color: var(--bg-secondary);
-    z-index: 12;
-    border-bottom: 0.45px solid var(--border-color); /* Linea sotto il disclaimer */
-  }
-
-  .main-column {
-    width: 60%;
-    margin-left: 40%;                        /* Distanza dalla sinistra per non sovrapporsi */
-    padding: 100px 20px 60px;
-    text-align: center;
-  }
-
-  .mobile-btn {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    background-color: #fff;
-    color: #000;
-    border: 0.5px solid var(--border-color);
-    padding: 10px 15px;
-    border-radius: 999px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-
-  .mobile-btn:hover {
-    background-color: #000;
-    color: #fff;
-  }
-
-  .mobile-history-btn {
-    top: 10px;
-    left: 10px;
-  }
-
-  .mobile-disclaimer-btn {
-    top: 10px;
-    right: 10px;
-  }
-
-  .mobile-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--bg-secondary);
-    z-index: 2000;
-    padding: 20px;
-    overflow-y: auto;
-  }
-
-  .mobile-modal h3 {
-    font-size: 1.4rem;
-    font-weight: 400;
-    margin-bottom: 20px;
-  }
-
-  .modal-close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: #fff;
-    color: #000;
-    border: 0.5px solid var(--border-color);
-    padding: 8px 20px;
-    border-radius: 999px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-
-  .modal-close-btn:hover {
-    background-color: #000;
-    color: #fff;
-  }
-
-  h2 {
-    font-size: 8rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-    margin-top: 10px;
-  }
-
-.description {
-  font-size: 1rem;
-  line-height: 1.5;
-  max-width: 700px;
-  margin: 0 auto 15px;
-  padding: 0 10px;
-}
-
-@media (max-width: 768px) {
-  .description {
-    font-size: 0.9rem;
-    line-height: 1.4;
-    padding: 0 15px;
-  }
-}
-
-@media (max-width: 480px) {
-  .description {
-    font-size: 0.8rem;
-    line-height: 1.3;
-    padding: 0 12px;
-  }
-}
-
-  textarea {
-    width: 100%;
-    max-width: 700px;
-    height: 160px;
-    font-family: 'Inter', sans-serif;
-    font-size: 1.1rem;
-    padding: 16px;
-    margin-top: 20px;
-    border: 0.5px solid var(--border-color);
-    background: var(--bg-secondary);
-    border-radius: 12px;
-  }
-
-  button {
-    background-color: #fff;
-    color: #000;
-    border: 0.5px solid var(--border-color);
-    padding: 14px 40px;
-    font-size: 1rem;
-    margin-top: 25px;
-    cursor: pointer;
-    border-radius: 999px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-
-  button:hover {
-    background-color: #000;
-    color: #fff;
-  }
-
-  .output-container {
-    display: none;
-    margin-top: 30px;
-  }
-
-  #outputText {
-    font-size: 1.25rem;
-    font-style: italic;
-    padding: 15px;
-    background: var(--bg-secondary);
-    border-radius: 10px;
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-    border: 0.5px solid var(--border-color);
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-    max-width: 700px;
-    margin: 40px auto 0;
-    text-align: left;
-  }
-
-  li {
-    margin-bottom: 15px;
-    font-size: 1rem;
-    border-bottom: 0.5px solid var(--border-color);
-    padding-bottom: 10px;
-  }
-
-  #historyContainer {
-    margin-top: 30px;
-  }
-
-  @media (max-width: 1024px) {
-    h2 {
-      font-size: 6rem;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .container {
-      flex-direction: column;
-    }
-
-    .history-column, .disclaimer {
-      display: none;
-    }
-
-    .main-column {
-      width: 100%;
-      margin-left: 0;
-      padding-top: 60px;
-    }
-
-    .mobile-btn {
-      display: block;
-    }
-
-    h2 {
-      font-size: 5rem;
-    }
-
-    .description {
-      font-size: 1rem;
-      padding: 0 15px;
-    }
-
-    textarea {
-      max-width: 95%;
-    }
-
-    #outputText {
-      max-width: 95%;
-    }
-
-    ul {
-      max-width: 95%;
-    }
-  }
-
-  @media (max-width: 480px) {
-    h2 {
-      font-size: 4rem;
-    }
-
-    button {
-      padding: 12px 30px;
-      font-size: 0.9rem;
-    }
-
-    .mobile-btn {
-      padding: 8px 12px;
-      font-size: 0.85rem;
-    }
-  }
-</style>
-
-</head>
-<body>
-  <button class="mobile-btn mobile-history-btn" onclick="toggleMobileModal('mobileHistoryModal')">History</button>
-  <button class="mobile-btn mobile-disclaimer-btn" onclick="toggleMobileModal('mobileDisclaimerModal')">About the Data</button>
-
-  <div class="mobile-modal" id="mobileHistoryModal">
-    <h3>History</h3>
-      <p>The Raised Fist is an iconic and nomadic symbol that has been widely reproduced and reused across different movements and contexts for over a century. Its familiarity and mobility across causes have made it one of the most enduring political icons of our time.</p>
-      <p>The Raised Fist emoji was approved as part of Unicode 6.0 in 2010 and added to Emoji 1.0 in 2015. Since then, it has been widely used in digital communication to express resistance, solidarity, and defiance. The emoji gained particular prominence during the Black Lives Matter protests in 2020, following the global outcry over the death of George Floyd.</p> 
-      <p>As a digital extension of the physical gesture, the emoji allows people to participate in conversations about social justice, show solidarity, and sometimes even bypass social media algorithms. Its recognizability and emotional weight make it a powerful tool in digital activism, enabling users to quickly and effectively signal support for a range of causes related to justice and human rights.</p>
-      <p>Just like its physical counterpart, the raised fist emoji has become a universal symbol of resistance in the digital age—continuing and amplifying the legacy of one of history’s most enduring symbols of defiance and hope.</p>
-      <p>The raised fist emoji ✊🏿 has its roots in a long tradition of the raised fist symbol, which has represented solidarity, resistance, and the fight against oppression since the early 20th century. </p>
-       <p>Over the decades, the symbol gained prominence in various social and political movements, including labor unions, anti-fascist groups, civil rights campaigns, and feminist organizations.
-Historically, trade unions as well as socialist and communist parties adopted the raised fist. It was later embraced by anti-fascist movements between the world wars and by pan-African, anti-colonial, and anti-apartheid movements. In more recent history, it has been used by the Black Power movement, Women’s Liberation, and Gay Liberation.</p>
-       <p>When associated with Black Power and anti-racist struggles, the raised fist is often referred to as the "Black Power salute" or "Black Power fist." Building on its strong connection to Black political resistance since the mid-20th century, the raised fist is now most closely associated with the Black Lives Matter movement—especially following the widespread demonstrations and social media activism in 2020 after the police murder of George Floyd.</p>
-       <p>However, it is important to emphasize that no single movement or cause can claim exclusive ownership of the raised fist. Its recurring use across different times, regions, and political struggles highlights both its adaptability and symbolic longevity. The power of the raised fist lies precisely in this flexibility—its capacity to be recognized and repurposed by various groups seeking justice.</p>
-       <p>The raised fist is a visual symbol used globally by a wide array of social movements and political organizations. It manifests either as a physical gesture—an arm raised with a clenched fist—or as a graphic icon appearing on posters, placards, street art, pamphlets, badges, and clothing. Like all symbols, it conveys abstract ideas—most notably resistance. It also embodies the concept of "power from below" and the solidarity of people united in political struggle. As a result, the raised fist is commonly associated with democratic movements and popular uprisings against oppression.
-</p>
-  </div>
-
- <div class="mobile-modal" id="mobileDisclaimerModal">
-  <h3>About the Data</h3>
-  <button class="modal-close-btn" onclick="toggleMobileModal('mobileDisclaimerModal')">Close</button>
-  <p>This experimental translator was created by Master's students in Information Design at DAE. It analyzes the relationship between emojis and words based on data collected from social media posts related to ✊🏿 Black Lives Matter. Designed to explore media activism, censorship, and online resistance, the website provides only a partial view due to the limited dataset.</p>
-</div>
-
-  <div class="container">
-    <div class="disclaimer">
-        This experimental translator was created by Master's students in Information Design at DAE. It analyzes the relationship between emojis and words based on data collected from social media posts related to Black Lives Matter. Designed to explore media activism, censorship, and online resistance, the website provides only a partial view due to the limited dataset.
-    </div>
-    <div class="history-column">
-      <h3>History</h3>
-      <p>The Raised Fist is an iconic and nomadic symbol that has been widely reproduced and reused across different movements and contexts for over a century. Its familiarity and mobility across causes have made it one of the most enduring political icons of our time.</p>
-      <p>The Raised Fist emoji was approved as part of Unicode 6.0 in 2010 and added to Emoji 1.0 in 2015. Since then, it has been widely used in digital communication to express resistance, solidarity, and defiance. The emoji gained particular prominence during the Black Lives Matter protests in 2020, following the global outcry over the death of George Floyd.</p> 
-      <p>As a digital extension of the physical gesture, the emoji allows people to participate in conversations about social justice, show solidarity, and sometimes even bypass social media algorithms. Its recognizability and emotional weight make it a powerful tool in digital activism, enabling users to quickly and effectively signal support for a range of causes related to justice and human rights.</p>
-      <p>Just like its physical counterpart, the raised fist emoji has become a universal symbol of resistance in the digital age—continuing and amplifying the legacy of one of history’s most enduring symbols of defiance and hope.</p>
-      <p>The raised fist emoji ✊🏿 has its roots in a long tradition of the raised fist symbol, which has represented solidarity, resistance, and the fight against oppression since the early 20th century. </p>
-       <p>Over the decades, the symbol gained prominence in various social and political movements, including labor unions, anti-fascist groups, civil rights campaigns, and feminist organizations.
-Historically, trade unions as well as socialist and communist parties adopted the raised fist. It was later embraced by anti-fascist movements between the world wars and by pan-African, anti-colonial, and anti-apartheid movements. In more recent history, it has been used by the Black Power movement, Women’s Liberation, and Gay Liberation.</p>
-       <p>When associated with Black Power and anti-racist struggles, the raised fist is often referred to as the "Black Power salute" or "Black Power fist." Building on its strong connection to Black political resistance since the mid-20th century, the raised fist is now most closely associated with the Black Lives Matter movement—especially following the widespread demonstrations and social media activism in 2020 after the police murder of George Floyd.</p>
-       <p>However, it is important to emphasize that no single movement or cause can claim exclusive ownership of the raised fist. Its recurring use across different times, regions, and political struggles highlights both its adaptability and symbolic longevity. The power of the raised fist lies precisely in this flexibility—its capacity to be recognized and repurposed by various groups seeking justice.</p>
-       <p>The raised fist is a visual symbol used globally by a wide array of social movements and political organizations. It manifests either as a physical gesture—an arm raised with a clenched fist—or as a graphic icon appearing on posters, placards, street art, pamphlets, badges, and clothing. Like all symbols, it conveys abstract ideas—most notably resistance. It also embodies the concept of "power from below" and the solidarity of people united in political struggle. As a result, the raised fist is commonly associated with democratic movements and popular uprisings against oppression.
-</p>
-      <a href="https://collection.theblackarchives.nl/" target="_blank" rel="noopener noreferrer">The Black Archives, </a>
-      <a href="https://uark.libguides.com/c.php?g=1050881&p=7631856" target="_blank" rel="noopener noreferrer">Archiving the Black Lives Matter Movement Project, </a>
-      <a href="https://archive-it.org/collections/4783" target="_blank" rel="noopener noreferrer">Black Lives Matter Web Archive</a>
-    </div>
-
-    <div class="main-column">
-      <h2>✊🏿✊🏾✊🏽✊🏼✊🏻</h2>
-      <p class="description">The raised fist has become a powerful symbol of Black resistance and solidarity, evolving from a physical gesture against oppression to a digital icon used to express support for racial justice. The black fist emoji represents strength, unity, and the ongoing fight against systemic racism. This translation tool is designed to help you engage in digital activism and amplify your message effectively. By focusing on emojis as symbols of resistance and community, it helps you find the most impactful combinations to express your cause.
-</p>
-      <textarea id="inputText" placeholder="Type your message..."></textarea><br>
-      <button onclick="translateText()">Translate</button>
-      
-      <div id="outputContainer" class="output-container">
-        <p>Translated Text:</p>
-        <p id="outputText"></p>
-      </div>
-      
-      <div id="historyContainer" style="display:none;">
-        <h3>Translation History:</h3>
-        <ul id="historyList"></ul>
-      </div>
-    </div>
-  </div>
-
-  <script>
     function toggleMobileModal(modalId) {
       const modal = document.getElementById(modalId);
       modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
