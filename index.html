@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>When Words Are No Longer Safe</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
@@ -13,13 +13,13 @@
       font-style: normal;
       font-display: swap;
     }
-    
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-    
+
     body {
       font-family: 'Inter', sans-serif;
       background-color: #ffffff;
@@ -31,83 +31,107 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
     }
-    
+
     h1 {
       font-family: 'AkzidenzGrotesk', sans-serif;
       font-size: clamp(2.2rem, 5.5vw, 4.5rem);
       margin-bottom: 20px;
       line-height: 1.2;
     }
-    
-   h2 {
-  font-family: 'Inter', sans-serif;
-  font-size: clamp(0.85rem, 2.5vw, 1.2rem);
-  margin-bottom: 5vh; /* reduced from 8vh */
-  line-height: 1.3;
-  font-weight: 400; /* increased from 300 to make it slightly heavier */
-}
-    
+
     .emoji-links {
       display: flex;
       flex-direction: row;
       justify-content: center;
-      gap: 30px;
+      gap: 40px;
+      z-index: 2;
     }
-    
+
     .emoji-links span {
-      font-size: clamp(2.5rem, 8vw, 4rem);
+      font-size: clamp(5rem, 12vw, 10rem);
       cursor: pointer;
       transition: transform 0.2s ease;
       display: inline-block;
     }
-    
+
     .emoji-links span:hover {
       transform: scale(1.2);
     }
-    
+
+    .caption {
+      display: none;
+    }
+
     a {
       text-decoration: none;
     }
-    
-    @media (max-width: 600px) {
-      body {
-        padding: 40px 15px;
+
+    .rain-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .emoji-fall {
+      position: absolute;
+      font-size: 2.5rem;
+      animation: fall 2.5s linear forwards;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-10%);
+        opacity: 1;
       }
-      
-      .emoji-links {
-        flex-direction: column;
-        gap: 30px;
+      100% {
+        transform: translateY(110vh);
+        opacity: 0;
       }
     }
-    
-    @media (max-width: 400px) {
-      body {
-        padding: 30px 10px;
-      }
-      
-      h2 {
-        margin-bottom: 6vh;
-      }
-    }
- </style>
+  </style>
 </head>
 <body>
   <h1>WHEN WORDS ARE NO LONGER SAFE</h1>
-  <h2>which cause has led you here?</h2>
   <div class="emoji-links">
     <div class="emoji-item">
-      <a href="translatemetoo.html"><span>🍚🐰</span></a>
-      <div class="caption">Me Too</div>
+      <a href="translatemetoo.html"><span onmouseenter="triggerRain('metoo')">🍚🐰</span></a>
     </div>
     <div class="emoji-item">
-      <a href="transalateblm.html"><span>✊🏿✊🏾✊🏽✊🏽✊🏻</span></a>
-      <div class="caption">Black Lives Matter</div>
+      <a href="transalateblm.html"><span onmouseenter="triggerRain('blm')">✊🏿✊🏾✊🏽✊🏼✊🏻</span></a>
     </div>
     <div class="emoji-item">
-      <a href="translator.html"><span>🍉</span></a>
-      <div class="caption">Free Palestine</div>
+      <a href="translator.html"><span onmouseenter="triggerRain('palestine')">🍉</span></a>
     </div>
   </div>
+
+  <div class="rain-container" id="rainContainer"></div>
+
+  <script>
+    const emojiSets = {
+      metoo: ["🐰", "🍚", "✊", "💪", "🎀", "❤️", "🔥", "💔", "🧠", "💥", "🗣️", "🌸", "🐇", "📡", "🕯️", "🧡", "💜", "🌍", "😅", "🥢", "🙅🏻‍♀️", "🦅", "❤️‍🔥", "💕", "✨", "❌", "🍯", "🐝", "🫶", "🥊", "🦷", "🫀", "⛅", "🧷", "✌🏼", "❤️‍🩹", "♀️", "🕊️", "🕳️", "⛓️", "🔍", "✋🏻", "🌈"],
+      blm: ["✊🏿", "🐐", "🖤", "✊🏿✊🏾✊🏽✊🏼✊🏻", "🤎", "✊", "💯", "❤️", "🔥", "👏🏿", "🎯", "👏", "☑️", "🏳️‍🌈", "💙", "🧡", "👊🏾", "👑", "📸", "👏🏽", "👀", "🙏", "🙏🏽", "⚫", "💪🏿", "📌", "🙄", "✨", "✅", "👊🏿", "♥️", "🌹", "❗", "🕊", "🤍", "💈", "⚪", "💚", "💜", "🎉", "🙏🏿", "😱", "🤬", "🏳️‍⚧️", "👇🏽", "🫱🏼‍🫲🏾", "✌🏾", "😁", "💗", "🐈‍⬛", "🐕‍🦺", "🥺", "🙏🏾", "😔", "📚", "❌", "🔴", "🔵", "📷", "🙌🏿", "🤷🏿‍♂️", "🫶🏽", "💩", "🕳️", "💪🏾", "🫱🏾‍🫲🏼", "🩵", "🩶", "🎭", "🎟️", "🐾", "🌱", "🌍", "😍", "🤸🏿", "🫱🏿‍🫲🏻", "🌟", "🚶", "🚶🏾", "🌉", "⛓️", "🤔", "☺️", "🚨", "💇🏿‍♂️"],
+      palestine: ["🍉", "🟥⬛⬜🟩", "❤️", "🕊️", "🤍", "💔", "❤", "🚨", "‼️", "💚", "🖤", "🤙🏾", "🤲", "❤️‍🩹", "🌙", "🤲🏻", "😭", "💗", "♥️", "🔗", "🙏", "✊", "💜", "✅", "💯", "🗝️", "💞", "🥰", "🌟", "🕊", "🌷", "📌", "✍🏽", "❗", "⭕", "⚪", "☝🏼"]
+    };
+
+    function triggerRain(category) {
+      const container = document.getElementById('rainContainer');
+      const emojis = emojiSets[category];
+      for (let i = 0; i < 60; i++) {
+        const emoji = document.createElement('div');
+        emoji.className = 'emoji-fall';
+        emoji.style.left = Math.random() * 100 + 'vw';
+        emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        container.appendChild(emoji);
+        setTimeout(() => container.removeChild(emoji), 2500);
+      }
+    }
+  </script>
 </body>
 </html>
