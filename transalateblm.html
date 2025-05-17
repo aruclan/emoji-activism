@@ -616,24 +616,35 @@ function getEmoji(word) {
 
       const sentences = text.match(/[^.!?]+[.!?]?/g) || [];
       const translatedSentences = sentences.map(sentence => {
-        let translated = sentence.split(/\s+/).map(wordWithPunctuation => {
+        // First, handle the case for BLM or Black Lives Matter
+        let processedSentence = sentence;
+        const lowerCase = sentence.toLowerCase();
+        
+        if (lowerCase.includes("black lives matter") || lowerCase.includes("blm")) {
+          processedSentence = processedSentence.replace(/black lives matter/gi, "✊🏿");
+          processedSentence = processedSentence.replace(/\bblm\b/gi, "✊🏿");
+        }
+        
+        // Now append emojis for other detected words
+        let appendedEmojis = "";
+        const words = sentence.split(/\s+/);
+        
+        words.forEach(wordWithPunctuation => {
           const match = wordWithPunctuation.match(/^(\W*)([\w\-]+)(\W*)$/);
-          if (!match) return wordWithPunctuation;
-
-          const [, leading, word, trailing] = match;
+          if (!match) return;
+          
+          const [, , word, ] = match;
           const emojiList = getEmoji(word);
+          
           if (emojiList.length > 0) {
             const emoji = emojiList[Math.floor(Math.random() * emojiList.length)];
-            return leading + emoji + trailing;
+            if (!appendedEmojis.includes(emoji)) {
+              appendedEmojis += emoji + " ";
+            }
           }
-          return wordWithPunctuation;
-        }).join(" ");
-
-        if (sentence.toLowerCase().includes("black lives matter") || sentence.toLowerCase().includes("blm")) {
-          translated = translated.trim() + " ✊🏿";
-        }
-
-        return translated;
+        });
+        
+        return processedSentence.trim() + (appendedEmojis ? " " + appendedEmojis.trim() : "");
       });
 
       const finalTranslation = translatedSentences.join(" ");
