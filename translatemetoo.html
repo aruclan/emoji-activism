@@ -1,6 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Emoji Translator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    .rain-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1000;
+    }
+
+    .emoji-fall {
+      position: absolute;
+      font-size: 2rem;
+      animation: fall var(--fall-speed, 8s) ease-in forwards;
+      opacity: 1;
+      transform: translateX(var(--x-offset));
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translate(var(--x-offset), -20vh);
+        opacity: 1;
+      }
+      80% {
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--x-offset), 130vh);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="rain-container" id="rainContainer"></div>
+
+  <script>
+    const emojisFromTranslator = [
+      "🍉", "🟥⬛⬜🟩", "❤️", "🕊️", "🤍", "💔", "❤", "🚨", "‼️", "💚", "🖤", "🤙🏾", "🤲", "❤️‍🩹", "🌙",
+      "🤲🏻", "😭", "💗", "♥️", "🔗", "🙏", "✊", "💜", "✅", "💯", "🗝️", "💞", "🥰", "🌟", "🕊", "🌷", "📌",
+      "✍🏽", "❗", "⭕", "⚪", "☝🏼", "❤️🖤🤍💚", "✌️", "☮️", "🙏🏻", "✌", "👞", "🪄", "🪑", "🥀", "✌🏼",
+      "🫶", "🫂", "✌🏻", "🧶", "💟", "🖐🏼", "🏴", "✋🏽", "👍", "🧷", "🙏🏽", "🫒", "🍊", "👍🏻", "🎑", "🎐",
+      "👏🏼", "📻", "💪"
+    ];
+
+    window.addEventListener('load', () => {
+      const container = document.getElementById('rainContainer');
+      const numEmojis = 100;
+      for (let i = 0; i < numEmojis; i++) {
+        const emoji = document.createElement('div');
+        emoji.className = 'emoji-fall';
+        emoji.textContent = emojisFromTranslator[Math.floor(Math.random() * emojisFromTranslator.length)];
+        emoji.style.setProperty('--x-offset', `${(Math.random() - 0.5) * 100}px`);
+        emoji.style.left = Math.random() * 100 + 'vw';
+        emoji.style.top = Math.random() * -30 + 'vh';
+        emoji.style.setProperty('--fall-speed', (6 + Math.random() * 6).toFixed(2) + 's');
+        emoji.style.fontSize = (1.5 + Math.random() * 1.5) + 'rem';
+        container.appendChild(emoji);
+        setTimeout(() => container.removeChild(emoji), 12000);
+      }
+    });
+  </script>
+
+  <div class="container">
+    <!-- Original translator HTML content should be inserted here -->
+  </div>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Emoji Translator</title>
