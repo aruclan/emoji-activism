@@ -82,19 +82,19 @@
 
     .emoji-fall {
       position: absolute;
-      font-size: 2rem;
-      animation: fall var(--fall-speed, 8s) ease-in forwards;
-      opacity: 1;
+      font-size: 1.5rem;
+      animation: fall var(--fall-speed, 15s) linear forwards;
+      opacity: 0.6;
       transform: translateX(var(--x-offset));
     }
 
     @keyframes fall {
       0% {
         transform: translate(var(--x-offset), -20vh);
-        opacity: 1;
+        opacity: 0.6;
       }
-      80% {
-        opacity: 1;
+      85% {
+        opacity: 0.6;
       }
       100% {
         transform: translate(var(--x-offset), 130vh);
@@ -107,13 +107,13 @@
   <h1 id="mainTitle">WHEN WORDS ARE NO LONGER SAFE</h1>
   <div class="emoji-links">
     <div class="emoji-item">
-      <a href="translatemetoo.html"><span onmouseenter="triggerRain('metoo')">🍚🐰</span></a>
+      <a href="translatemetoo.html"><span>🍚🐰</span></a>
     </div>
     <div class="emoji-item">
-      <a href="transalateblm.html"><span onmouseenter="triggerRain('blm')">✊🏿✊🏾✊🏽✊🏼✊🏻</span></a>
+      <a href="transalateblm.html"><span>✊🏿✊🏾✊🏽✊🏼✊🏻</span></a>
     </div>
     <div class="emoji-item">
-      <a href="translator.html"><span onmouseenter="triggerRain('palestine')">🍉</span></a>
+      <a href="translator.html"><span>🍉</span></a>
     </div>
   </div>
 
@@ -122,22 +122,22 @@
   <script>
     const emojiSets = {
       metoo: ["🐰", "🍚", "✊", "💪", "🎀", "❤️", "🔥", "💔", "🧠", "💥",
-    "🗣️", "🌸", "🐇", "📡", "🕯️", "🧡", "💜", "🌍", "😅", "🥢",
-    "🙅🏻‍♀️", "🦅", "❤️‍🔥", "💕", "✨", "❌", "🍯", "🐝", "🫶", "🥊",
-    "🦷", "🫀", "⛅", "🧷", "✌🏼", "❤️‍🩹", "♀️", "🕊️", "🕳️", "⛓️",
-    "🔍", "✋🏻", "🌈"],
+        "🗣️", "🌸", "🐇", "📡", "🕯️", "🧡", "💜", "🌍", "😅", "🥢",
+        "🙅🏻‍♀️", "🦅", "❤️‍🔥", "💕", "✨", "❌", "🍯", "🐝", "🫶", "🥊",
+        "🦷", "🫀", "⛅", "🧷", "✌🏼", "❤️‍🩹", "♀️", "🕊️", "🕳️", "⛓️",
+        "🔍", "✋🏻", "🌈"],
       blm: ["✊🏿", "🐐", "🖤", "✊🏿✊🏾✊🏽✊🏼✊🏻", "🤎", "✊", "💯", "❤️", "🔥", "👏🏿", "🎯", "👏", "☑️", "🏳️‍🌈", "💙", "🧡", "👊🏾", "👑",
-    "📸", "👏🏽", "👀", "🙏", "🙏🏽", "⚫", "💪🏿", "📌", "🙄", "✨", "✅", "👊🏿", "♥️", "🌹", "❗", "🕊", "🤍", "💈", "⚪", "💚",
-    "💜", "🎉", "🙏🏿", "😱", "🤬", "🏳️‍⚧️", "👇🏽", "🫱🏼‍🫲🏾", "✌🏾", "😁", "💗", "🐈‍⬛", "🐕‍🦺", "🥺", "🙏🏾", "😔", "📚", "❌",
-    "🔴", "🔵", "📷", "🙌🏿", "🤷🏿‍♂️", "🫶🏽", "💩", "🕳️", "💪🏾", "🫱🏾‍🫲🏼", "🩵", "🩶", "🎭", "🎟️", "🐾", "🌱", "🌍", "😍",
-    "🤸🏿", "🫱🏿‍🫲🏻", "🌟", "🚶", "🚶🏾", "🌉", "⛓️", "🤔", "☺️", "🚨", "💇🏿‍♂️"],
+        "📸", "👏🏽", "👀", "🙏", "🙏🏽", "⚫", "💪🏿", "📌", "🙄", "✨", "✅", "👊🏿", "♥️", "🌹", "❗", "🕊", "🤍", "💈", "⚪", "💚",
+        "💜", "🎉", "🙏🏿", "😱", "🤬", "🏳️‍⚧️", "👇🏽", "🫱🏼‍🫲🏾", "✌🏾", "😁", "💗", "🐈‍⬛", "🐕‍🦺", "🥺", "🙏🏾", "😔", "📚", "❌",
+        "🔴", "🔵", "📷", "🙌🏿", "🤷🏿‍♂️", "🫶🏽", "💩", "🕳️", "💪🏾", "🫱🏾‍🫲🏼", "🩵", "🩶", "🎭", "🎟️", "🐾", "🌱", "🌍", "😍",
+        "🤸🏿", "🫱🏿‍🫲🏻", "🌟", "🚶", "🚶🏾", "🌉", "⛓️", "🤔", "☺️", "🚨", "💇🏿‍♂️"],
       palestine: ["🍉", "🟥⬛⬜🟩", "❤️", "🕊️", "🤍", "💔", "❤", "🚨", "‼️", "💚", 
-"🖤", "🤙🏾", "🤲", "❤️‍🩹", "🌙", "🤲🏻", "😭", "💗", "♥️", "🔗", 
-"🙏", "✊", "💜", "✅", "💯", "🗝️", "💞", "🥰", "🌟", "🕊", 
-"🌷", "📌", "✍🏽", "❗", "⭕", "⚪", "☝🏼", "❤️🖤🤍💚", "🙏🏻", "☮️", 
-"✌️", "♥️", "✌", "👞", "🪄", "🪑", "🥀", "✌🏼", "🫶", "🫂", 
-"✌🏻", "🧶", "💟", "🌹", "🖐🏼", "🏴", "✋🏽", "👍", "🧷", "🙏🏽", 
-"🫒", "🍊", "👍🏻", "🎑", "🎐", "👏🏼", "📻", "💪"]
+        "🖤", "🤙🏾", "🤲", "❤️‍🩹", "🌙", "🤲🏻", "😭", "💗", "♥️", "🔗", 
+        "🙏", "✊", "💜", "✅", "💯", "🗝️", "💞", "🥰", "🌟", "🕊", 
+        "🌷", "📌", "✍🏽", "❗", "⭕", "⚪", "☝🏼", "❤️🖤🤍💚", "🙏🏻", "☮️", 
+        "✌️", "♥️", "✌", "👞", "🪄", "🪑", "🥀", "✌🏼", "🫶", "🫂", 
+        "✌🏻", "🧶", "💟", "🌹", "🖐🏼", "🏴", "✋🏽", "👍", "🧷", "🙏🏽", 
+        "🫒", "🍊", "👍🏻", "🎑", "🎐", "👏🏼", "📻", "💪"]
     };
 
     const allEmojis = [
@@ -146,43 +146,45 @@
       ...emojiSets.palestine
     ];
 
-    function triggerRain(category) {
+    // Start continuous rain with all emojis
+    function startContinuousRain() {
       const container = document.getElementById('rainContainer');
-      const emojis = emojiSets[category];
-      const numEmojis = 100;
-
-      for (let i = 0; i < numEmojis; i++) {
-        const emoji = document.createElement('div');
-        emoji.className = 'emoji-fall';
-        emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-        emoji.style.setProperty('--x-offset', `${(Math.random() - 0.5) * 100}px`);
-        emoji.style.left = Math.random() * 100 + 'vw';
-        emoji.style.top = Math.random() * -20 + 'vh';
-        emoji.style.setProperty('--fall-speed', (6 + Math.random() * 6).toFixed(2) + 's');
-        emoji.style.fontSize = (1.5 + Math.random() * 1.5) + 'rem';
-        container.appendChild(emoji);
-        setTimeout(() => container.removeChild(emoji), 12000);
-      }
-    }
-
-    // Trigger rainfall automatically on mobile
-    if (window.matchMedia("only screen and (max-width: 768px)").matches) {
-      window.addEventListener('load', () => {
-        const container = document.getElementById('rainContainer');
-        const numEmojis = 120;
-        for (let i = 0; i < numEmojis; i++) {
+      const maxEmojisOnScreen = 25; // Less invasive by limiting max emojis on screen
+      
+      function addEmoji() {
+        if (container.children.length < maxEmojisOnScreen) {
           const emoji = document.createElement('div');
           emoji.className = 'emoji-fall';
           emoji.textContent = allEmojis[Math.floor(Math.random() * allEmojis.length)];
-          emoji.style.setProperty('--x-offset', `${(Math.random() - 0.5) * 100}px`);
+          emoji.style.setProperty('--x-offset', `${(Math.random() - 0.5) * 80}px`); // Less horizontal movement
           emoji.style.left = Math.random() * 100 + 'vw';
-          emoji.style.top = Math.random() * -30 + 'vh';
-          emoji.style.setProperty('--fall-speed', (6 + Math.random() * 6).toFixed(2) + 's');
-          emoji.style.fontSize = (1.5 + Math.random() * 1.5) + 'rem';
+          emoji.style.top = '-20px';
+          
+          // Make animation slower and more varied for less invasive feel
+          const fallSpeed = 12 + Math.random() * 10; // Between 12-22 seconds
+          emoji.style.setProperty('--fall-speed', fallSpeed + 's');
+          
+          // Vary the size but keep it smaller for less invasiveness
+          emoji.style.fontSize = (0.8 + Math.random() * 0.7) + 'rem';
+          
           container.appendChild(emoji);
-          setTimeout(() => container.removeChild(emoji), 12000);
+          
+          // Remove emoji after animation completes
+          setTimeout(() => {
+            if (container.contains(emoji)) {
+              container.removeChild(emoji);
+            }
+          }, fallSpeed * 1000);
         }
-      });
+      }
+      
+      // Add emojis at a slower, random interval
+      setInterval(addEmoji, 600 + Math.random() * 400);
+      
+      // Start with a few emojis
+      for (let i = 0; i < 8; i++) {
+        setTimeout(addEmoji, i * 300);
+      }
     }
 
     // Title morph effect
@@ -194,8 +196,7 @@
     function morphWords() {
       let i = 0;
       interval = setInterval(() => {
-        const emojis = allEmojis;
-        const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+        const randomEmoji = allEmojis[Math.floor(Math.random() * allEmojis.length)];
         const tempWords = [...words];
         tempWords[i % tempWords.length] = randomEmoji;
         title.textContent = tempWords.join(" ");
@@ -214,6 +215,9 @@
     document.addEventListener("click", (e) => {
       if (!title.contains(e.target)) resetTitle();
     });
+
+    // Start continuous rain when page loads
+    window.addEventListener('load', startContinuousRain);
   </script>
 </body>
 </html>
