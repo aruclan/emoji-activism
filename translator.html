@@ -1,12 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Emoji Translator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+ <head>
   <style>
-    .rain-container {
+   .rain-container {
       position: fixed;
       top: 0;
       left: 0;
@@ -39,52 +35,14 @@
       }
     }
   </style>
-</head>
-<body>
-  <div class="rain-container" id="rainContainer"></div>
-
-  <script>
-    const emojisFromTranslator = [
-      "🍉", "🟥⬛⬜🟩", "❤️", "🕊️", "🤍", "💔", "❤", "🚨", "‼️", "💚", "🖤", "🤙🏾", "🤲", "❤️‍🩹", "🌙",
-      "🤲🏻", "😭", "💗", "♥️", "🔗", "🙏", "✊", "💜", "✅", "💯", "🗝️", "💞", "🥰", "🌟", "🕊", "🌷", "📌",
-      "✍🏽", "❗", "⭕", "⚪", "☝🏼", "❤️🖤🤍💚", "✌️", "☮️", "🙏🏻", "✌", "👞", "🪄", "🪑", "🥀", "✌🏼",
-      "🫶", "🫂", "✌🏻", "🧶", "💟", "🖐🏼", "🏴", "✋🏽", "👍", "🧷", "🙏🏽", "🫒", "🍊", "👍🏻", "🎑", "🎐",
-      "👏🏼", "📻", "💪"
-    ];
-
-    window.addEventListener('load', () => {
-      const container = document.getElementById('rainContainer');
-      const numEmojis = 100;
-      for (let i = 0; i < numEmojis; i++) {
-        const emoji = document.createElement('div');
-        emoji.className = 'emoji-fall';
-        emoji.textContent = emojisFromTranslator[Math.floor(Math.random() * emojisFromTranslator.length)];
-        emoji.style.setProperty('--x-offset', `${(Math.random() - 0.5) * 100}px`);
-        emoji.style.left = Math.random() * 100 + 'vw';
-        emoji.style.top = Math.random() * -30 + 'vh';
-        emoji.style.setProperty('--fall-speed', (6 + Math.random() * 6).toFixed(2) + 's');
-        emoji.style.fontSize = (1.5 + Math.random() * 1.5) + 'rem';
-        container.appendChild(emoji);
-        setTimeout(() => container.removeChild(emoji), 12000);
-      }
-    });
-  </script>
-
-  <div class="container">
-    <!-- Original translator HTML content should be inserted here -->
-  </div>
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Emoji Translator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Emoji Translator
+  </title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
   <style>
-  :root {
+   :root {
     --bg-primary: #ffffff;          /* Sfondo principale */
     --text-primary: #1a1a1a;        /* Testo principale */
     --bg-secondary: #ffffff;        /* Sfondo secondario (stesso del primario) */
@@ -390,69 +348,123 @@
       font-size: 0.85rem;
     }
   }
-</style>
-
-</head>
-<body>
-  <button class="mobile-btn mobile-history-btn" onclick="toggleMobileModal('mobileHistoryModal')">History</button>
-  <button class="mobile-btn mobile-disclaimer-btn" onclick="toggleMobileModal('mobileDisclaimerModal')">About the Data</button>
-
+  </style>
+ </head>
+ <body>
+  <div class="rain-container" id="rainContainer">
+  </div>
+  <button class="mobile-btn mobile-history-btn" onclick="toggleMobileModal('mobileHistoryModal')">
+   History
+  </button>
+  <button class="mobile-btn mobile-disclaimer-btn" onclick="toggleMobileModal('mobileDisclaimerModal')">
+   About the Data
+  </button>
   <div class="mobile-modal" id="mobileHistoryModal">
-    <h3>History</h3>
-    <button class="modal-close-btn" onclick="toggleMobileModal('mobileHistoryModal')">Close</button>
-<p>The Watermelon has evolved into a powerful symbol of Palestinian resistance, starting as physical displays in response to oppressive measures to its digital adoption as an emoji, ingeniously bypassing online censorship efforts. This transformation highlights the adaptability of symbolic communication in the face of restrictions on expression, allowing solidarity and national identity to persist and spread.</p>
-      <p>The fruit's significance is rooted in its connection to the colors of the Palestinian flag and its resilient nature, making it a powerful emblem in challenging times.</p>
-      <p>The symbolism of the Watermelon began after the 1967 Six-Day War, when the Israeli government restricted displays of the Palestinian flag—red, green, black, and white—in Gaza and the West Bank. This crackdown included actions like shutting down an art gallery in Ramallah in 1980, with an Israeli officer reportedly stating that even art using the forbidden colors, like a watermelon, was prohibited.</p>
-      <p>In defiance, some people started using the Watermelon's imagery or carrying the fruit itself in public, as its colors mirrored the banned flag: red pulp, green and white rind, and black seeds. This act served as a form of protest and a way to express Palestinian identity and resistance.</p>
-      <p>T Watermelon saw a resurgence in 2023, particularly after Israel's National Security Minister banned Palestinian flags in public places, prompting activists to use watermelon stickers as a form of opposition.</p>
-      <p>In 2023, social media became a crucial space for sharing information about the most recent Gaza conflict, but it also experienced significant censorship aimed at suppressing Palestinian narratives. To navigate these restrictions, activists turned to unconventional communication methods, transforming ordinary symbols like emojis into powerful tools.</p>
-      <p>The Watermelon gained profound meaning, used to represent the colors of the Palestinian flag and the resilience of Gaza citizens. The shift to using this emoji online was a deliberate strategy to circumvent censorship and shadow banning on platforms such as TikTok, Instagram, and Facebook.</p>
-      <p>Advocates suggest that employing emojis like 🍉 may confuse algorithms that tech companies reportedly use to suppress posts containing keywords related to Palestine or Gaza. This allows activists to signal solidarity and resistance across language and culture, reaching audiences despite platform restrictions.</p>
-    </div>
-
+   <h3>
+    History
+   </h3>
+   <button class="modal-close-btn" onclick="toggleMobileModal('mobileHistoryModal')">
+    Close
+   </button>
+   <p>
+    The Watermelon has evolved into a powerful symbol of Palestinian resistance, starting as physical displays in response to oppressive measures to its digital adoption as an emoji, ingeniously bypassing online censorship efforts. This transformation highlights the adaptability of symbolic communication in the face of restrictions on expression, allowing solidarity and national identity to persist and spread.
+   </p>
+   <p>
+    The fruit's significance is rooted in its connection to the colors of the Palestinian flag and its resilient nature, making it a powerful emblem in challenging times.
+   </p>
+   <p>
+    The symbolism of the Watermelon began after the 1967 Six-Day War, when the Israeli government restricted displays of the Palestinian flag—red, green, black, and white—in Gaza and the West Bank. This crackdown included actions like shutting down an art gallery in Ramallah in 1980, with an Israeli officer reportedly stating that even art using the forbidden colors, like a watermelon, was prohibited.
+   </p>
+   <p>
+    In defiance, some people started using the Watermelon's imagery or carrying the fruit itself in public, as its colors mirrored the banned flag: red pulp, green and white rind, and black seeds. This act served as a form of protest and a way to express Palestinian identity and resistance.
+   </p>
+   <p>
+    T Watermelon saw a resurgence in 2023, particularly after Israel's National Security Minister banned Palestinian flags in public places, prompting activists to use watermelon stickers as a form of opposition.
+   </p>
+   <p>
+    In 2023, social media became a crucial space for sharing information about the most recent Gaza conflict, but it also experienced significant censorship aimed at suppressing Palestinian narratives. To navigate these restrictions, activists turned to unconventional communication methods, transforming ordinary symbols like emojis into powerful tools.
+   </p>
+   <p>
+    The Watermelon gained profound meaning, used to represent the colors of the Palestinian flag and the resilience of Gaza citizens. The shift to using this emoji online was a deliberate strategy to circumvent censorship and shadow banning on platforms such as TikTok, Instagram, and Facebook.
+   </p>
+   <p>
+    Advocates suggest that employing emojis like 🍉 may confuse algorithms that tech companies reportedly use to suppress posts containing keywords related to Palestine or Gaza. This allows activists to signal solidarity and resistance across language and culture, reaching audiences despite platform restrictions.
+   </p>
+  </div>
   <div class="mobile-modal" id="mobileDisclaimerModal">
-    <h3>About the Data</h3>
-    <button class="modal-close-btn" onclick="toggleMobileModal('mobileDisclaimerModal')">Close</button>
-    <p>This experimental translator was created by Master's students in Information Design at DAE. It analyzes the relationship between emojis and words based on the 1,000 most recent posts (as of 30/04/2025) related to 🍉 Palestine. Designed to explore media activism, censorship, and online resistance, the website provides only a partial view due to the limited dataset.</p>
+   <h3>
+    About the Data
+   </h3>
+   <button class="modal-close-btn" onclick="toggleMobileModal('mobileDisclaimerModal')">
+    Close
+   </button>
+   <p>
+    This experimental translator was created by Master's students in Information Design at DAE. It analyzes the relationship between emojis and words based on the 1,000 most recent posts (as of 30/04/2025) related to 🍉 Palestine. Designed to explore media activism, censorship, and online resistance, the website provides only a partial view due to the limited dataset.
+   </p>
   </div>
-
   <div class="container">
-    <div class="disclaimer">
-        This experimental translator was created by Master's students in Information Design at DAE. It analyzes the relationship between emojis and words based on the 1,000 most recent posts (as of 30/04/2025) related to 🍉 Palestine. Designed to explore media activism, censorship, and online resistance, the website provides only a partial view due to the limited dataset.
+   <div class="disclaimer">
+    This experimental translator was created by Master's students in Information Design at DAE. It analyzes the relationship between emojis and words based on the 1,000 most recent posts (as of 30/04/2025) related to 🍉 Palestine. Designed to explore media activism, censorship, and online resistance, the website provides only a partial view due to the limited dataset.
+   </div>
+   <div class="history-column">
+    <h3>
+     History
+    </h3>
+    <p>
+     The Watermelon has evolved into a powerful symbol of Palestinian resistance, starting as physical displays in response to oppressive measures to its digital adoption as an emoji, ingeniously bypassing online censorship efforts. This transformation highlights the adaptability of symbolic communication in the face of restrictions on expression, allowing solidarity and national identity to persist and spread.
+    </p>
+    <p>
+     The fruit's significance is rooted in its connection to the colors of the Palestinian flag and its resilient nature, making it a powerful emblem in challenging times.
+    </p>
+    <p>
+     The symbolism of the Watermelon began after the 1967 Six-Day War, when the Israeli government restricted displays of the Palestinian flag—red, green, black, and white—in Gaza and the West Bank. This crackdown included actions like shutting down an art gallery in Ramallah in 1980, with an Israeli officer reportedly stating that even art using the forbidden colors, like a watermelon, was prohibited.
+    </p>
+    <p>
+     In defiance, some people started using the Watermelon's imagery or carrying the fruit itself in public, as its colors mirrored the banned flag: red pulp, green and white rind, and black seeds. This act served as a form of protest and a way to express Palestinian identity and resistance.
+    </p>
+    <p>
+     T Watermelon saw a resurgence in 2023, particularly after Israel's National Security Minister banned Palestinian flags in public places, prompting activists to use watermelon stickers as a form of opposition.
+    </p>
+    <p>
+     In 2023, social media became a crucial space for sharing information about the most recent Gaza conflict, but it also experienced significant censorship aimed at suppressing Palestinian narratives. To navigate these restrictions, activists turned to unconventional communication methods, transforming ordinary symbols like emojis into powerful tools.
+    </p>
+    <p>
+     The Watermelon gained profound meaning, used to represent the colors of the Palestinian flag and the resilience of Gaza citizens. The shift to using this emoji online was a deliberate strategy to circumvent censorship and shadow banning on platforms such as TikTok, Instagram, and Facebook.
+    </p>
+    <p>
+     Advocates suggest that employing emojis like 🍉 may confuse algorithms that tech companies reportedly use to suppress posts containing keywords related to Palestine or Gaza. This allows activists to signal solidarity and resistance across language and culture, reaching audiences despite platform restrictions.
+    </p>
+   </div>
+   <div class="main-column">
+    <h2>
+     🍉
+    </h2>
+    <p class="description">
+     The watermelon has become a powerful symbol of Palestinian resistance, evolving from a physical display against oppression to a digital icon used to bypass online censorship. Its colors mirror those of the Palestinian flag, and its resilient nature makes it a fitting emblem of solidarity and national identity in the face of adversity. This translation tool is designed to help you engage in protests and amplify your message effectively. By focusing on emojis as symbols of resistance and community, it helps you find the most impactful combinations to express your cause. Take a moment to reflect on and share your thoughts about this movement.
+    </p>
+    <textarea id="inputText" placeholder="Type your message..."></textarea>
+    <br/>
+    <button onclick="translateText()">
+     Translate
+    </button>
+    <div class="output-container" id="outputContainer">
+     <p>
+      Translated Text:
+     </p>
+     <p id="outputText">
+     </p>
     </div>
-    <div class="history-column">
-      <h3>History</h3>
-      <p>The Watermelon has evolved into a powerful symbol of Palestinian resistance, starting as physical displays in response to oppressive measures to its digital adoption as an emoji, ingeniously bypassing online censorship efforts. This transformation highlights the adaptability of symbolic communication in the face of restrictions on expression, allowing solidarity and national identity to persist and spread.</p>
-      <p>The fruit's significance is rooted in its connection to the colors of the Palestinian flag and its resilient nature, making it a powerful emblem in challenging times.</p>
-      <p>The symbolism of the Watermelon began after the 1967 Six-Day War, when the Israeli government restricted displays of the Palestinian flag—red, green, black, and white—in Gaza and the West Bank. This crackdown included actions like shutting down an art gallery in Ramallah in 1980, with an Israeli officer reportedly stating that even art using the forbidden colors, like a watermelon, was prohibited.</p>
-      <p>In defiance, some people started using the Watermelon's imagery or carrying the fruit itself in public, as its colors mirrored the banned flag: red pulp, green and white rind, and black seeds. This act served as a form of protest and a way to express Palestinian identity and resistance.</p>
-      <p>T Watermelon saw a resurgence in 2023, particularly after Israel's National Security Minister banned Palestinian flags in public places, prompting activists to use watermelon stickers as a form of opposition.</p>
-      <p>In 2023, social media became a crucial space for sharing information about the most recent Gaza conflict, but it also experienced significant censorship aimed at suppressing Palestinian narratives. To navigate these restrictions, activists turned to unconventional communication methods, transforming ordinary symbols like emojis into powerful tools.</p>
-      <p>The Watermelon gained profound meaning, used to represent the colors of the Palestinian flag and the resilience of Gaza citizens. The shift to using this emoji online was a deliberate strategy to circumvent censorship and shadow banning on platforms such as TikTok, Instagram, and Facebook.</p>
-      <p>Advocates suggest that employing emojis like 🍉 may confuse algorithms that tech companies reportedly use to suppress posts containing keywords related to Palestine or Gaza. This allows activists to signal solidarity and resistance across language and culture, reaching audiences despite platform restrictions.</p>
+    <div id="historyContainer" style="display:none;">
+     <h3>
+      Translation History:
+     </h3>
+     <ul id="historyList">
+     </ul>
     </div>
-
-    <div class="main-column">
-      <h2>🍉</h2>
-      <p class="description">The watermelon has become a powerful symbol of Palestinian resistance, evolving from a physical display against oppression to a digital icon used to bypass online censorship. Its colors mirror those of the Palestinian flag, and its resilient nature makes it a fitting emblem of solidarity and national identity in the face of adversity. This translation tool is designed to help you engage in protests and amplify your message effectively. By focusing on emojis as symbols of resistance and community, it helps you find the most impactful combinations to express your cause. Take a moment to reflect on and share your thoughts about this movement.
-</p>
-      <textarea id="inputText" placeholder="Type your message..."></textarea><br>
-      <button onclick="translateText()">Translate</button>
-      
-      <div id="outputContainer" class="output-container">
-        <p>Translated Text:</p>
-        <p id="outputText"></p>
-      </div>
-      
-      <div id="historyContainer" style="display:none;">
-        <h3>Translation History:</h3>
-        <ul id="historyList"></ul>
-      </div>
-    </div>
+   </div>
   </div>
-
   <script>
-    function toggleMobileModal(modalId) {
+   function toggleMobileModal(modalId) {
       const modal = document.getElementById(modalId);
       modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
     }
@@ -670,5 +682,31 @@ function translateText() {
   historyList.prepend(listItem);
 }
   </script>
-</body>
+  <script>
+   const emojisFromTranslator = [
+      "🍉", "🟥⬛⬜🟩", "❤️", "🕊️", "🤍", "💔", "❤", "🚨", "‼️", "💚", "🖤", "🤙🏾", "🤲", "❤️‍🩹", "🌙",
+      "🤲🏻", "😭", "💗", "♥️", "🔗", "🙏", "✊", "💜", "✅", "💯", "🗝️", "💞", "🥰", "🌟", "🕊", "🌷", "📌",
+      "✍🏽", "❗", "⭕", "⚪", "☝🏼", "❤️🖤🤍💚", "✌️", "☮️", "🙏🏻", "✌", "👞", "🪄", "🪑", "🥀", "✌🏼",
+      "🫶", "🫂", "✌🏻", "🧶", "💟", "🖐🏼", "🏴", "✋🏽", "👍", "🧷", "🙏🏽", "🫒", "🍊", "👍🏻", "🎑", "🎐",
+      "👏🏼", "📻", "💪"
+    ];
+
+    window.addEventListener('load', () => {
+      const container = document.getElementById('rainContainer');
+      const numEmojis = 100;
+      for (let i = 0; i < numEmojis; i++) {
+        const emoji = document.createElement('div');
+        emoji.className = 'emoji-fall';
+        emoji.textContent = emojisFromTranslator[Math.floor(Math.random() * emojisFromTranslator.length)];
+        emoji.style.setProperty('--x-offset', `${(Math.random() - 0.5) * 100}px`);
+        emoji.style.left = Math.random() * 100 + 'vw';
+        emoji.style.top = Math.random() * -30 + 'vh';
+        emoji.style.setProperty('--fall-speed', (6 + Math.random() * 6).toFixed(2) + 's');
+        emoji.style.fontSize = (1.5 + Math.random() * 1.5) + 'rem';
+        container.appendChild(emoji);
+        setTimeout(() => container.removeChild(emoji), 12000);
+      }
+    });
+  </script>
+ </body>
 </html>
