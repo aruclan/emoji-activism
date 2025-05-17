@@ -82,7 +82,7 @@
 
     .emoji-fall {
       position: absolute;
-      font-size: 2.5rem;
+      font-size: 2rem;
       animation: fall var(--fall-speed, 15s) linear forwards;
       opacity: 1;
       transform: translateX(var(--x-offset));
@@ -164,8 +164,8 @@
           const fallSpeed = 10 + Math.random() * 8; // Between 10-18 seconds
           emoji.style.setProperty('--fall-speed', fallSpeed + 's');
           
-          // Larger size as requested
-          emoji.style.fontSize = (2 + Math.random() * 1.5) + 'rem';
+          // Slightly smaller size as requested
+          emoji.style.fontSize = (1.7 + Math.random() * 1) + 'rem';
           
           container.appendChild(emoji);
           
