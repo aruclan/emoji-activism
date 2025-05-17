@@ -6,6 +6,315 @@
   <title>Emoji Translator</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg-primary: #ffffff;          /* Sfondo principale */
+      --text-primary: #1a1a1a;        /* Testo principale */
+      --bg-secondary: #ffffff;        /* Sfondo secondario (stesso del primario) */
+      --border-color: #000;           /* Colore dei bordi */
+      --shadow-light: rgba(0, 0, 0, 0.05);
+      --shadow-medium: rgba(0,0,0,0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);   /* Sfondo della pagina */
+      color: var(--text-primary);            /* Colore del testo */
+      font-family: 'Inter', sans-serif;      /* Font principale */
+      line-height: 1.7;                      /* Spaziatura del testo */
+      display: flex;                         /* Layout flex orizzontale */
+      min-height: 100vh;                     /* Altezza minima intera finestra */
+    }
+
+    .container {
+      display: flex;
+      width: 100%;
+      max-width: 1600px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .history-column {
+      position: fixed;                         /* Colonna fissa a sinistra */
+      top: 0;
+      left: 0;
+      width: 35%;                              /* 35% della larghezza dello schermo */
+      height: 100vh;                           /* Altezza piena della finestra */
+      padding: 20px;
+      background-color: var(--bg-secondary);
+      border-right: 0.5px solid var(--border-color);
+      overflow-y: auto;                        /* Scroll se contenuto lungo */
+      font-size: 0.9rem;
+      line-height: 1.6;
+      z-index: 10;
+    }
+
+    .history-column h3 {
+      margin: 0;
+      top: 0;
+      position: sticky;
+      font-size: 20px;
+      font-weight: 350;
+      background-color: var(--bg-secondary);
+      padding: 10px 0;
+      border-bottom: 0.5px solid var(--border-color); /* Linea sotto il titolo */
+      z-index: 1;
+    }
+
+    .disclaimer {
+      position: fixed;                         /* Box fisso in alto */
+      top: 0;
+      left: 35%;                               /* Inizia dove finisce history-column */
+      width: 65%;
+      font-size: 12px;                         /* Dimensione maggiore richiesta */
+      line-height: 1.3;
+      padding: 12px 15px;
+      color: #000;
+      font-weight: 300;
+      text-align: left;                       /* Allineamento a destra richiesto */
+      background-color: var(--bg-secondary);
+      z-index: 12;
+      border-bottom: 0.45px solid var(--border-color); /* Linea sotto il disclaimer */
+    }
+
+    .main-column {
+      width: 60%;
+      margin-left: 40%;                        /* Distanza dalla sinistra per non sovrapporsi */
+      padding: 100px 20px 60px;
+      text-align: center;
+    }
+
+    .mobile-btn {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      background-color: #fff;
+      color: #000;
+      border: 0.5px solid var(--border-color);
+      padding: 10px 15px;
+      border-radius: 999px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .mobile-btn:hover {
+      background-color: #000;
+      color: #fff;
+    }
+
+    .mobile-history-btn {
+      top: 10px;
+      left: 10px;
+    }
+
+    .mobile-disclaimer-btn {
+      top: 10px;
+      right: 10px;
+    }
+
+    .mobile-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-secondary);
+      z-index: 2000;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .mobile-modal h3 {
+      font-size: 1.4rem;
+      font-weight: 400;
+      margin-bottom: 20px;
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #fff;
+      color: #000;
+      border: 0.5px solid var(--border-color);
+      padding: 8px 20px;
+      border-radius: 999px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close-btn:hover {
+      background-color: #000;
+      color: #fff;
+    }
+
+    h2 {
+      font-size: 8rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      margin-top: 10px;
+    }
+      
+    .description {
+      font-size: 1rem;
+      line-height: 1.5;
+      max-width: 700px;
+      margin: 0 auto 15px;
+      padding: 0 10px;
+    }
+
+    @media (max-width: 768px) {
+      .description {
+        font-size: 0.9rem;
+        line-height: 1.4;
+        padding: 0 15px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .description {
+        font-size: 0.8rem;
+        line-height: 1.3;
+        padding: 0 12px;
+      }
+    }
+
+    textarea {
+      width: 100%;
+      max-width: 700px;
+      height: 160px;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      padding: 16px;
+      margin-top: 20px;
+      border: 0.5px solid var(--border-color);
+      background: var(--bg-secondary);
+      border-radius: 12px;
+    }
+
+    button {
+      background-color: #fff;
+      color: #000;
+      border: 0.5px solid var(--border-color);
+      padding: 14px 40px;
+      font-size: 1rem;
+      margin-top: 25px;
+      cursor: pointer;
+      border-radius: 999px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #000;
+      color: #fff;
+    }
+
+    .output-container {
+      display: none;
+      margin-top: 30px;
+    }
+
+    #outputText {
+      font-size: 1.25rem;
+      font-style: italic;
+      padding: 15px;
+      background: var(--bg-secondary);
+      border-radius: 10px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      border: 0.5px solid var(--border-color);
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      max-width: 700px;
+      margin: 40px auto 0;
+      text-align: left;
+    }
+
+    li {
+      margin-bottom: 15px;
+      font-size: 1rem;
+      border-bottom: 0.5px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    #historyContainer {
+      margin-top: 30px;
+    }
+
+    @media (max-width: 1024px) {
+      h2 {
+        font-size: 6rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .history-column, .disclaimer {
+        display: none;
+      }
+
+      .main-column {
+        width: 100%;
+        margin-left: 0;
+        padding-top: 60px;
+      }
+
+      .mobile-btn {
+        display: block;
+      }
+
+      h2 {
+        font-size: 5rem;
+      }
+
+      .description {
+        font-size: 1rem;
+        padding: 0 15px;
+      }
+
+      textarea {
+        max-width: 95%;
+      }
+
+      #outputText {
+        max-width: 95%;
+      }
+
+      ul {
+        max-width: 95%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h2 {
+        font-size: 4rem;
+      }
+
+      button {
+        padding: 12px 30px;
+        font-size: 0.9rem;
+      }
+
+      .mobile-btn {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+      }
+    }
+    
+    /* Emoji Rain Animation Styles */
     .rain-container {
       position: fixed;
       top: 0;
@@ -43,372 +352,20 @@
 <body>
   <div class="rain-container" id="rainContainer"></div>
 
-  <script>
-    const emojisFromTranslator = [
-      "🐰", "🍚", "✊", "💪", "🎀", "❤️", "🔥", "💔", "🧠", "💥",
-    "🗣️", "🌸", "🐇", "📡", "🕯️", "🧡", "💜", "🌍", "😅", "🥢",
-    "🙅🏻‍♀️", "🦅", "❤️‍🔥", "💕", "✨", "❌", "🍯", "🐝", "🫶", "🥊",
-    "🦷", "🫀", "⛅", "🧷", "✌🏼", "❤️‍🩹", "♀️", "🕊️", "🕳️", "⛓️",
-    "🔍", "✋🏻", "🌈"
-    ];
-
-    window.addEventListener('load', () => {
-      const container = document.getElementById('rainContainer');
-      const numEmojis = 100;
-      for (let i = 0; i < numEmojis; i++) {
-        const emoji = document.createElement('div');
-        emoji.className = 'emoji-fall';
-        emoji.textContent = emojisFromTranslator[Math.floor(Math.random() * emojisFromTranslator.length)];
-        emoji.style.setProperty('--x-offset', `${(Math.random() - 0.5) * 100}px`);
-        emoji.style.left = Math.random() * 100 + 'vw';
-        emoji.style.top = Math.random() * -30 + 'vh';
-        emoji.style.setProperty('--fall-speed', (6 + Math.random() * 6).toFixed(2) + 's');
-        emoji.style.fontSize = (1.5 + Math.random() * 1.5) + 'rem';
-        container.appendChild(emoji);
-        setTimeout(() => container.removeChild(emoji), 12000);
-      }
-    });
-  </script>
-
-  <div class="container">
-    <!-- Original translator HTML content should be inserted here -->
-  </div>
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Emoji Translator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <style>
-  :root {
-    --bg-primary: #ffffff;          /* Sfondo principale */
-    --text-primary: #1a1a1a;        /* Testo principale */
-    --bg-secondary: #ffffff;        /* Sfondo secondario (stesso del primario) */
-    --border-color: #000;           /* Colore dei bordi */
-    --shadow-light: rgba(0, 0, 0, 0.05);
-    --shadow-medium: rgba(0,0,0,0.1);
-  }
-
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-
-  body {
-    background-color: var(--bg-primary);   /* Sfondo della pagina */
-    color: var(--text-primary);            /* Colore del testo */
-    font-family: 'Inter', sans-serif;      /* Font principale */
-    line-height: 1.7;                      /* Spaziatura del testo */
-    display: flex;                         /* Layout flex orizzontale */
-    min-height: 100vh;                     /* Altezza minima intera finestra */
-  }
-
-  .container {
-    display: flex;
-    width: 100%;
-    max-width: 1600px;
-    margin: 0 auto;
-    position: relative;
-  }
-
-  .history-column {
-    position: fixed;                         /* Colonna fissa a sinistra */
-    top: 0;
-    left: 0;
-    width: 35%;                              /* 35% della larghezza dello schermo */
-    height: 100vh;                           /* Altezza piena della finestra */
-    padding: 20px;
-    background-color: var(--bg-secondary);
-    border-right: 0.5px solid var(--border-color);
-    overflow-y: auto;                        /* Scroll se contenuto lungo */
-    font-size: 0.9rem;
-    line-height: 1.6;
-    z-index: 10;
-  }
-
-  .history-column h3 {
-    margin: 0;
-    top: 0;
-    position: sticky;
-    font-size: 20px;
-    font-weight: 350;
-    background-color: var(--bg-secondary);
-    padding: 10px 0;
-    border-bottom: 0.5px solid var(--border-color); /* Linea sotto il titolo */
-    z-index: 1;
-  }
-
-  .disclaimer {
-    position: fixed;                         /* Box fisso in alto */
-    top: 0;
-    left: 35%;                               /* Inizia dove finisce history-column */
-    width: 65%;
-    font-size: 12px;                         /* Dimensione maggiore richiesta */
-    line-height: 1.3;
-    padding: 12px 15px;
-    color: #000;
-    font-weight: 300;
-    text-align: left;                       /* Allineamento a destra richiesto */
-    background-color: var(--bg-secondary);
-    z-index: 12;
-    border-bottom: 0.45px solid var(--border-color); /* Linea sotto il disclaimer */
-  }
-
-  .main-column {
-    width: 60%;
-    margin-left: 40%;                        /* Distanza dalla sinistra per non sovrapporsi */
-    padding: 100px 20px 60px;
-    text-align: center;
-  }
-
-  .mobile-btn {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    background-color: #fff;
-    color: #000;
-    border: 0.5px solid var(--border-color);
-    padding: 10px 15px;
-    border-radius: 999px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-
-  .mobile-btn:hover {
-    background-color: #000;
-    color: #fff;
-  }
-
-  .mobile-history-btn {
-    top: 10px;
-    left: 10px;
-  }
-
-  .mobile-disclaimer-btn {
-    top: 10px;
-    right: 10px;
-  }
-
-  .mobile-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--bg-secondary);
-    z-index: 2000;
-    padding: 20px;
-    overflow-y: auto;
-  }
-
-  .mobile-modal h3 {
-    font-size: 1.4rem;
-    font-weight: 400;
-    margin-bottom: 20px;
-  }
-
-  .modal-close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: #fff;
-    color: #000;
-    border: 0.5px solid var(--border-color);
-    padding: 8px 20px;
-    border-radius: 999px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-
-  .modal-close-btn:hover {
-    background-color: #000;
-    color: #fff;
-  }
-
-  h2 {
-    font-size: 8rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-    margin-top: 10px;
-  }
-    
-.description {
-  font-size: 1rem;
-  line-height: 1.5;
-  max-width: 700px;
-  margin: 0 auto 15px;
-  padding: 0 10px;
-}
-
-@media (max-width: 768px) {
-  .description {
-    font-size: 0.9rem;
-    line-height: 1.4;
-    padding: 0 15px;
-  }
-}
-
-@media (max-width: 480px) {
-  .description {
-    font-size: 0.8rem;
-    line-height: 1.3;
-    padding: 0 12px;
-  }
-}
-
-  textarea {
-    width: 100%;
-    max-width: 700px;
-    height: 160px;
-    font-family: 'Inter', sans-serif;
-    font-size: 1.1rem;
-    padding: 16px;
-    margin-top: 20px;
-    border: 0.5px solid var(--border-color);
-    background: var(--bg-secondary);
-    border-radius: 12px;
-  }
-
-  button {
-    background-color: #fff;
-    color: #000;
-    border: 0.5px solid var(--border-color);
-    padding: 14px 40px;
-    font-size: 1rem;
-    margin-top: 25px;
-    cursor: pointer;
-    border-radius: 999px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-
-  button:hover {
-    background-color: #000;
-    color: #fff;
-  }
-
-  .output-container {
-    display: none;
-    margin-top: 30px;
-  }
-
-  #outputText {
-    font-size: 1.25rem;
-    font-style: italic;
-    padding: 15px;
-    background: var(--bg-secondary);
-    border-radius: 10px;
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-    border: 0.5px solid var(--border-color);
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-    max-width: 700px;
-    margin: 40px auto 0;
-    text-align: left;
-  }
-
-  li {
-    margin-bottom: 15px;
-    font-size: 1rem;
-    border-bottom: 0.5px solid var(--border-color);
-    padding-bottom: 10px;
-  }
-
-  #historyContainer {
-    margin-top: 30px;
-  }
-
-  @media (max-width: 1024px) {
-    h2 {
-      font-size: 6rem;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .container {
-      flex-direction: column;
-    }
-
-    .history-column, .disclaimer {
-      display: none;
-    }
-
-    .main-column {
-      width: 100%;
-      margin-left: 0;
-      padding-top: 60px;
-    }
-
-    .mobile-btn {
-      display: block;
-    }
-
-    h2 {
-      font-size: 5rem;
-    }
-
-    .description {
-      font-size: 1rem;
-      padding: 0 15px;
-    }
-
-    textarea {
-      max-width: 95%;
-    }
-
-    #outputText {
-      max-width: 95%;
-    }
-
-    ul {
-      max-width: 95%;
-    }
-  }
-
-  @media (max-width: 480px) {
-    h2 {
-      font-size: 4rem;
-    }
-
-    button {
-      padding: 12px 30px;
-      font-size: 0.9rem;
-    }
-
-    .mobile-btn {
-      padding: 8px 12px;
-      font-size: 0.85rem;
-    }
-  }
-</style>
-
-</head>
-<body>
   <button class="mobile-btn mobile-history-btn" onclick="toggleMobileModal('mobileHistoryModal')">History</button>
   <button class="mobile-btn mobile-disclaimer-btn" onclick="toggleMobileModal('mobileDisclaimerModal')">About the Data</button>
 
   <div class="mobile-modal" id="mobileHistoryModal">
     <h3>History</h3>
     <button class="modal-close-btn" onclick="toggleMobileModal('mobileHistoryModal')">Close</button>
-       <p>When spoken aloud the words for “rice bunny” are pronounced “mi tu,” a homophone that cleverly evades detection.</p>
-      <p>This homonymic feature has long been a tool for creative political dissent within Mainland China. In recent years, for example, the feminist movement in China has faced a crackdown from the state, resulting in activists being arrested and feminist discussion being censored online. When the hashtag #metoo was blocked on the Chinese micro-blogging platform Weibo in 2018, users soon found phonetic ways to circumvent online censorship. Me too pronounced in Chinese becomes “mi tu” (米 兔 ) or “rice bunny,” and so the emoji hashtag was born. </p>
-      <p>In January 2018, Luo Xixi, a graduate of Peking University, publicly accused her former professor Shen Yang of sexual harassment (an incident that occurred in 2004), sparking widespread public outcry. She used the hashtag #MeToo on Weibo, marking the beginning of the movement in China. Soon after, similar allegations emerged from other universities, including Peking University, Nanjing University, and the Communication University of China.</p>
-      <p>To circumvent online censorship, netizens began using homophones and symbolic language such as “MeToo” (米兔), “rice plus bunny”, and “Rice Bunny” (🍚🐰) to communicate the movement’s message.</p>
-      <p>Several incidents were exposed during this period—such as the case involving a professor at the Civil Aviation University and issues at Central China Normal University—which prompted discussions within universities about establishing anti-sexual harassment policies.</p>
-      <p>Cases beyond the university context began gaining attention: A well-known TV host, Zhu Jun, was accused of sexual harassment by a female intern named Xianzi.</p>
-      <p>Sexual harassment allegations also emerged in the NGO sector, such as the case involving an employee named Li.</p>
-      <p>Women increasingly began to speak out and file real-name reports on social media, despite facing legal risks and online abuse.</p>
+    <p>When spoken aloud the words for "rice bunny" are pronounced "mi tu," a homophone that cleverly evades detection.</p>
+    <p>This homonymic feature has long been a tool for creative political dissent within Mainland China. In recent years, for example, the feminist movement in China has faced a crackdown from the state, resulting in activists being arrested and feminist discussion being censored online. When the hashtag #metoo was blocked on the Chinese micro-blogging platform Weibo in 2018, users soon found phonetic ways to circumvent online censorship. Me too pronounced in Chinese becomes "mi tu" (米 兔 ) or "rice bunny," and so the emoji hashtag was born. </p>
+    <p>In January 2018, Luo Xixi, a graduate of Peking University, publicly accused her former professor Shen Yang of sexual harassment (an incident that occurred in 2004), sparking widespread public outcry. She used the hashtag #MeToo on Weibo, marking the beginning of the movement in China. Soon after, similar allegations emerged from other universities, including Peking University, Nanjing University, and the Communication University of China.</p>
+    <p>To circumvent online censorship, netizens began using homophones and symbolic language such as "MeToo" (米兔), "rice plus bunny", and "Rice Bunny" (🍚🐰) to communicate the movement's message.</p>
+    <p>Several incidents were exposed during this period—such as the case involving a professor at the Civil Aviation University and issues at Central China Normal University—which prompted discussions within universities about establishing anti-sexual harassment policies.</p>
+    <p>Cases beyond the university context began gaining attention: A well-known TV host, Zhu Jun, was accused of sexual harassment by a female intern named Xianzi.</p>
+    <p>Sexual harassment allegations also emerged in the NGO sector, such as the case involving an employee named Li.</p>
+    <p>Women increasingly began to speak out and file real-name reports on social media, despite facing legal risks and online abuse.</p>
   </div>
 
   <div class="mobile-modal" id="mobileDisclaimerModal">
@@ -419,14 +376,14 @@
 
   <div class="container">
     <div class="disclaimer">
-   This experimental translator was created by Master's students in Information Design at DAE. It analyzes the relationship between emojis and words in 104 survey responses collected between 22/04/25 and 08/05/25. The survey was conducted via an online form and asked participants how they would have supported the movement if they could post about it online. Designed to explore media activism, censorship, and online resistance, this translator is not based on official data extracted from social media. Its purpose is solely to illustrate the different ways one might support the movement online.
+      This experimental translator was created by Master's students in Information Design at DAE. It analyzes the relationship between emojis and words in 104 survey responses collected between 22/04/25 and 08/05/25. The survey was conducted via an online form and asked participants how they would have supported the movement if they could post about it online. Designed to explore media activism, censorship, and online resistance, this translator is not based on official data extracted from social media. Its purpose is solely to illustrate the different ways one might support the movement online.
     </div>
     <div class="history-column">
       <h3>History</h3>
-      <p>When spoken aloud the words for “rice bunny” are pronounced “mi tu,” a homophone that cleverly evades detection.</p>
-      <p>This homonymic feature has long been a tool for creative political dissent within Mainland China. In recent years, for example, the feminist movement in China has faced a crackdown from the state, resulting in activists being arrested and feminist discussion being censored online. When the hashtag #metoo was blocked on the Chinese micro-blogging platform Weibo in 2018, users soon found phonetic ways to circumvent online censorship. Me too pronounced in Chinese becomes “mi tu” (米 兔 ) or “rice bunny,” and so the emoji hashtag was born. </p>
+      <p>When spoken aloud the words for "rice bunny" are pronounced "mi tu," a homophone that cleverly evades detection.</p>
+      <p>This homonymic feature has long been a tool for creative political dissent within Mainland China. In recent years, for example, the feminist movement in China has faced a crackdown from the state, resulting in activists being arrested and feminist discussion being censored online. When the hashtag #metoo was blocked on the Chinese micro-blogging platform Weibo in 2018, users soon found phonetic ways to circumvent online censorship. Me too pronounced in Chinese becomes "mi tu" (米 兔 ) or "rice bunny," and so the emoji hashtag was born. </p>
       <p>In January 2018, Luo Xixi, a graduate of Peking University, publicly accused her former professor Shen Yang of sexual harassment (an incident that occurred in 2004), sparking widespread public outcry. She used the hashtag #MeToo on Weibo, marking the beginning of the movement in China. Soon after, similar allegations emerged from other universities, including Peking University, Nanjing University, and the Communication University of China.</p>
-      <p>To circumvent online censorship, netizens began using homophones and symbolic language such as “MeToo” (米兔), “rice plus bunny”, and “Rice Bunny” (🍚🐰) to communicate the movement’s message.</p>
+      <p>To circumvent online censorship, netizens began using homophones and symbolic language such as "MeToo" (米兔), "rice plus bunny", and "Rice Bunny" (🍚🐰) to communicate the movement's message.</p>
       <p>Several incidents were exposed during this period—such as the case involving a professor at the Civil Aviation University and issues at Central China Normal University—which prompted discussions within universities about establishing anti-sexual harassment policies.</p>
       <p>Cases beyond the university context began gaining attention: A well-known TV host, Zhu Jun, was accused of sexual harassment by a female intern named Xianzi.</p>
       <p>Sexual harassment allegations also emerged in the NGO sector, such as the case involving an employee named Li.</p>
@@ -435,7 +392,7 @@
 
     <div class="main-column">
       <h2>🍚🐰</h2>
-      <p class="description">The phrase “rice bunny,” pronounced “mi tu” in Chinese, is a homophone for “Me Too” and has been used as a clever workaround to evade online censorship in China. This linguistic tactic has been part of a broader tradition of using wordplay for political dissent. In 2018, after the #MeToo hashtag was blocked on Weibo, users adopted “mi tu” (米兔) and rice bunny emojis to continue discussing feminist issues. By focusing on emojis as symbols of resistance and community, it helps you find the most impactful combinations to express your cause. Take a moment to reflect on and share your thoughts about this movement. 
+      <p class="description">The phrase "rice bunny," pronounced "mi tu" in Chinese, is a homophone for "Me Too" and has been used as a clever workaround to evade online censorship in China. This linguistic tactic has been part of a broader tradition of using wordplay for political dissent. In 2018, after the #MeToo hashtag was blocked on Weibo, users adopted "mi tu" (米兔) and rice bunny emojis to continue discussing feminist issues. By focusing on emojis as symbols of resistance and community, it helps you find the most impactful combinations to express your cause. Take a moment to reflect on and share your thoughts about this movement.</p>
       <textarea id="inputText" placeholder="Type your message..."></textarea><br>
       <button onclick="translateText()">Translate</button>
       
@@ -452,169 +409,194 @@
   </div>
 
   <script>
-   function toggleMobileModal(modalId) {
-  const modal = document.getElementById(modalId);
-  modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
-}
-
-const wordToEmojis = {};
-
-function addMapping(word, emoji) {
-  word = word.toLowerCase().trim();
-  if (!wordToEmojis[word]) wordToEmojis[word] = [];
-  if (!wordToEmojis[word].includes(emoji)) wordToEmojis[word].push(emoji);
-}
-
-const synonyms = {
-  "support": ["solidarity", "help", "aid"],
-  "silence": ["silent", "silenced", "quiet"],
-  "strength": ["power", "strong", "brave"],
-  "erase": ["delete", "remove", "censor"],
-  "remember": ["memory", "recall", "forget"],
-  "movement": ["campaign", "advocacy", "action"],
-  "truth": ["reality", "fact", "honesty"],
-  "voices": ["speak", "speech", "expression"]
-};
-
-// Updated emoji mapping from the CSV data
-const metooEmojisWords = {
-  "🐰": ["metoo", "see", "solidarity", "erase", "删除不了的"],
-  "🍚": ["metoo", "see", "solidarity", "erase", "删除不了的"],
-  "✊": ["support", "see", "metoo", "voices"],
-  "💪": ["strength", "write", "text"],
-  "🎀": ["spreading", "try", "association", "news"],
-  "❤️": ["stay", "strong", "ricebunnymovement", "movement"],
-  "🔥": ["think", "post", "would", "wrote"],
-  "💔": ["remember", "metoo", "try", "emojis"],
-  "🧠": ["erase", "tried", "message", "meaning", "remains"],
-  "💥": ["maybe", "symbolic", "images"],
-  "🗣️": ["support", "speak", "voice", "expression"],
-  "🌸": ["strength", "stand", "solidarity"],
-  "🐇": ["silent", "silenced", "remember"],
-  "📡": ["many", "forget", "truth", "finds", "way"],
-  "🕯️": ["support", "movement", "hope", "safe", "brave"],
-  "🧡": ["strength", "still", "女生加油", "不被沉默"],
-  "💜": ["love", "send", "protect"],
-  "🌍": ["emojis", "movement", "based", "chinese"],
-  "😅": ["know"],
-  "🥢": ["chinese", "culture", "tools"],
-  "🙅🏻‍♀️": ["emojis", "already", "censored", "start"],
-  "🦅": ["protect", "freedom", "liberty"],
-  "❤️‍🔥": ["try", "association", "inform", "spread"],
-  "💕": ["stay", "strong", "support"],
-  "✨": ["stay", "strong", "sending", "solidarity", "afar"],
-  "❌": ["cancel", "stop", "censor"],
-  "🍯": ["cancel", "news", "spreading", "tide"],
-  "🐝": ["like", "another", "emoji", "news", "spreading"],
-  "🫶": ["probably", "share", "someones", "elses"],
-  "🥊": ["maybe", "think", "wrote", "post"],
-  "🦷": ["emoji", "use", "words", "find", "another"],
-  "🫀": ["maybe", "symbolic", "images", "memory", "stays"],
-  "⛅": ["post", "something", "like", "cannot"],
-  "🧷": ["post", "something", "like", "cannot"],
-  "✌🏼": ["peace", "solidarity", "support"],
-  "❤️‍🩹": ["try", "emojis", "show", "support"],
-  "♀️": ["voices", "silenced", "see", "hear"],
-  "🕊️": ["voices", "silenced", "see", "hear"],
-  "🕳️": ["tried", "erase", "message", "meaning", "remains"],
-  "⛓️": ["饭是热的", "兔是自由的", "我们还在这里", "truth", "finds"],
-  "🔍": ["share", "image", "subtle", "symbols"],
-  "✋🏻": ["truth", "stop", "hand"],
-  "🌈": ["strength", "hope", "diverse"]
-};
-
-// Add all mappings from the CSV data
-for (const [emoji, words] of Object.entries(metooEmojisWords)) {
-  words.forEach(word => addMapping(word, emoji));
-}
-
-function getEmoji(word) {
-  const lower = word.toLowerCase();
-
-  // 1. Exact match
-  if (wordToEmojis[lower]) return wordToEmojis[lower];
-
-  // 2. Synonym match
-  for (let key in synonyms) {
-    if (synonyms[key].includes(lower)) {
-      return wordToEmojis[key] || [];
-    }
-  }
-
-  // 3. Mild fuzzy matching (distance of exactly 1 only)
-  let bestMatch = null;
-  for (let known of Object.keys(wordToEmojis)) {
-    let dist = levenshteinDistance(known, lower);
-    if (dist === 1) {
-      bestMatch = known;
-      break;
-    }
-  }
-
-  return bestMatch ? wordToEmojis[bestMatch] : [];
-}
-
-function levenshteinDistance(a, b) {
-  const dp = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
-  for (let i = 0; i <= a.length; i++) dp[i][0] = i;
-  for (let j = 0; j <= b.length; j++) dp[0][j] = j;
-  for (let i = 1; i <= a.length; i++) {
-    for (let j = 1; j <= b.length; j++) {
-      dp[i][j] = a[i - 1] === b[j - 1]
-        ? dp[i - 1][j - 1]
-        : 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
-    }
-  }
-  return dp[a.length][b.length];
-}
-
-function translateText() {
-  const inputField = document.getElementById("inputText");
-  const outputField = document.getElementById("outputText");
-  const historyList = document.getElementById("historyList");
-  const outputContainer = document.getElementById("outputContainer");
-  const historyContainer = document.getElementById("historyContainer");
-
-  let text = inputField.value.trim();
-  if (!text) return;
-
-  // Show output container and history container if they're hidden
-  outputContainer.style.display = "block";
-  historyContainer.style.display = "block";
-
-  const sentences = text.match(/[^.!?]+[.!?]?/g) || [];
-  const translatedSentences = sentences.map(sentence => {
-    let translated = sentence.split(/\s+/).map(wordWithPunctuation => {
-      const match = wordWithPunctuation.match(/^(\W*)([\w\-]+)(\W*)$/);
-      if (!match) return wordWithPunctuation;
-
-      const [, leading, word, trailing] = match;
-      const emojiList = getEmoji(word);
-      if (emojiList.length > 0) {
-        const emoji = emojiList[Math.floor(Math.random() * emojiList.length)];
-        return leading + emoji + trailing;
+    // Emoji rain animation
+    window.addEventListener('load', () => {
+      const container = document.getElementById('rainContainer');
+      const emojisFromTranslator = [
+        "🐰", "🍚", "✊", "💪", "🎀", "❤️", "🔥", "💔", "🧠", "💥",
+        "🗣️", "🌸", "🐇", "📡", "🕯️", "🧡", "💜", "🌍", "😅", "🥢",
+        "🙅🏻‍♀️", "🦅", "❤️‍🔥", "💕", "✨", "❌", "🍯", "🐝", "🫶", "🥊",
+        "🦷", "🫀", "⛅", "🧷", "✌🏼", "❤️‍🩹", "♀️", "🕊️", "🕳️", "⛓️",
+        "🔍", "✋🏻", "🌈"
+      ];
+      
+      const numEmojis = 100;
+      for (let i = 0; i < numEmojis; i++) {
+        const emoji = document.createElement('div');
+        emoji.className = 'emoji-fall';
+        emoji.textContent = emojisFromTranslator[Math.floor(Math.random() * emojisFromTranslator.length)];
+        emoji.style.setProperty('--x-offset', `${(Math.random() - 0.5) * 100}px`);
+        emoji.style.left = Math.random() * 100 + 'vw';
+        emoji.style.top = Math.random() * -30 + 'vh';
+        emoji.style.setProperty('--fall-speed', (6 + Math.random() * 6).toFixed(2) + 's');
+        emoji.style.fontSize = (1.5 + Math.random() * 1.5) + 'rem';
+        container.appendChild(emoji);
+        setTimeout(() => container.removeChild(emoji), 12000);
       }
-      return wordWithPunctuation;
-    }).join(" ");
+    });
 
-    // Add the primary MeToo emojis for certain keywords
-    if (sentence.toLowerCase().includes("metoo") || 
-        sentence.toLowerCase().includes("me too") || 
-        sentence.toLowerCase().includes("voice") || 
-        sentence.toLowerCase().includes("speak")) {
-      translated = translated.trim() + " 🐰🍚";
+    function toggleMobileModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
     }
 
-    return translated;
-  });
+    const wordToEmojis = {};
 
-  const finalTranslation = translatedSentences.join(" ");
-  outputField.innerText = finalTranslation;
+    function addMapping(word, emoji) {
+      word = word.toLowerCase().trim();
+      if (!wordToEmojis[word]) wordToEmojis[word] = [];
+      if (!wordToEmojis[word].includes(emoji)) wordToEmojis[word].push(emoji);
+    }
 
-  const listItem = document.createElement("li");
-  listItem.textContent = `Original: "${text}" → Translated: "${finalTranslation}"`;
-  historyList.prepend(listItem);
+    const synonyms = {
+      "support": ["solidarity", "help", "aid"],
+      "silence": ["silent", "silenced", "quiet"],
+      "strength": ["power", "strong", "brave"],
+      "erase": ["delete", "remove", "censor"],
+      "remember": ["memory", "recall", "forget"],
+      "movement": ["campaign", "advocacy", "action"],
+      "truth": ["reality", "fact", "honesty"],
+      "voices": ["speak", "speech", "expression"]
+    };
 
+    // Updated emoji mapping from the CSV data
+    const metooEmojisWords = {
+      "🐰": ["metoo", "see", "solidarity", "erase", "删除不了的"],
+      "🍚": ["metoo", "see", "solidarity", "erase", "删除不了的"],
+      "✊": ["support", "see", "metoo", "voices"],
+      "💪": ["strength", "write", "text"],
+      "🎀": ["spreading", "try", "association", "news"],
+      "❤️": ["stay", "strong", "ricebunnymovement", "movement"],
+      "🔥": ["think", "post", "would", "wrote"],
+      "💔": ["remember", "metoo", "try", "emojis"],
+      "🧠": ["erase", "tried", "message", "meaning", "remains"],
+      "💥": ["maybe", "symbolic", "images"],
+      "🗣️": ["support", "speak", "voice", "expression"],
+      "🌸": ["strength", "stand", "solidarity"],
+      "🐇": ["silent", "silenced", "remember"],
+      "📡": ["many", "forget", "truth", "finds", "way"],
+      "🕯️": ["support", "movement", "hope", "safe", "brave"],
+      "🧡": ["strength", "still", "女生加油", "不被沉默"],
+      "💜": ["love", "send", "protect"],
+      "🌍": ["emojis", "movement", "based", "chinese"],
+      "😅": ["know"],
+      "🥢": ["chinese", "culture", "tools"],
+      "🙅🏻‍♀️": ["emojis", "already", "censored", "start"],
+      "🦅": ["protect", "freedom", "liberty"],
+      "❤️‍🔥": ["try", "association", "inform", "spread"],
+      "💕": ["stay", "strong", "support"],
+      "✨": ["stay", "strong", "sending", "solidarity", "afar"],
+      "❌": ["cancel", "stop", "censor"],
+      "🍯": ["cancel", "news", "spreading", "tide"],
+      "🐝": ["like", "another", "emoji", "news", "spreading"],
+      "🫶": ["probably", "share", "someones", "elses"],
+      "🥊": ["maybe", "think", "wrote", "post"],
+      "🦷": ["emoji", "use", "words", "find", "another"],
+      "🫀": ["maybe", "symbolic", "images", "memory", "stays"],
+      "⛅": ["post", "something", "like", "cannot"],
+      "🧷": ["post", "something", "like", "cannot"],
+      "✌🏼": ["peace", "solidarity", "support"],
+      "❤️‍🩹": ["try", "emojis", "show", "support"],
+      "♀️": ["voices", "silenced", "see", "hear"],
+      "🕊️": ["voices", "silenced", "see", "hear"],
+      "🕳️": ["tried", "erase", "message", "meaning", "remains"],
+      "⛓️": ["饭是热的", "兔是自由的", "我们还在这里", "truth", "finds"],
+      "🔍": ["share", "image", "subtle", "symbols"],
+      "✋🏻": ["truth", "stop", "hand"],
+      "🌈": ["strength", "hope", "diverse"]
+    };
+
+    // Add all mappings from the CSV data
+    for (const [emoji, words] of Object.entries(metooEmojisWords)) {
+      words.forEach(word => addMapping(word, emoji));
+    }
+
+    function getEmoji(word) {
+      const lower = word.toLowerCase();
+
+      // 1. Exact match
+      if (wordToEmojis[lower]) return wordToEmojis[lower];
+
+      // 2. Synonym match
+      for (let key in synonyms) {
+        if (synonyms[key].includes(lower)) {
+          return wordToEmojis[key] || [];
+        }
+      }
+
+      // 3. Mild fuzzy matching (distance of exactly 1 only)
+      let bestMatch = null;
+      for (let known of Object.keys(wordToEmojis)) {
+        let dist = levenshteinDistance(known, lower);
+        if (dist === 1) {
+          bestMatch = known;
+          break;
+        }
+      }
+
+      return bestMatch ? wordToEmojis[bestMatch] : [];
+    }
+
+    function levenshteinDistance(a, b) {
+      const dp = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
+      for (let i = 0; i <= a.length; i++) dp[i][0] = i;
+      for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+      for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+          dp[i][j] = a[i - 1] === b[j - 1]
+            ? dp[i - 1][j - 1]
+            : 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
+        }
+      }
+      return dp[a.length][b.length];
+    }
+
+    function translateText() {
+      const inputField = document.getElementById("inputText");
+      const outputField = document.getElementById("outputText");
+      const historyList = document.getElementById("historyList");
+      const outputContainer = document.getElementById("outputContainer");
+      const historyContainer = document.getElementById("historyContainer");
+
+      let text = inputField.value.trim();
+      if (!text) return;
+
+      // Show output container and history container if they're hidden
+      outputContainer.style.display = "block";
+      historyContainer.style.display = "block";
+
+      const sentences = text.match(/[^.!?]+[.!?]?/g) || [];
+      const translatedSentences = sentences.map(sentence => {
+        let translated = sentence.split(/\s+/).map(wordWithPunctuation => {
+          const match = wordWithPunctuation.match(/^(\W*)([\w\-]+)(\W*)$/);
+          if (!match) return wordWithPunctuation;
+
+          const [, leading, word, trailing] = match;
+          const emojiList = getEmoji(word);
+          if (emojiList.length > 0) {
+            const emoji = emojiList[Math.floor(Math.random() * emojiList.length)];
+            return leading + emoji + trailing;
+          }
+          return wordWithPunctuation;
+        }).join(" ");
+
+        // Add the primary MeToo emojis for certain keywords
+        if (sentence.toLowerCase().includes("metoo") || 
+            sentence.toLowerCase().includes("me too") || 
+            sentence.toLowerCase().includes("voice") || 
+            sentence.toLowerCase().includes("speak")) {
+          translated = translated.trim() + " 🐰🍚";
+        }
+
+        return translated;
+      });
+
+      const finalTranslation = translatedSentences.join(" ");
+      outputField.innerText = finalTranslation;
+
+      const listItem = document.createElement("li");
+      listItem.textContent = `Original: "${text}" → Translated: "${finalTranslation}"`;
+      historyList.prepend(listItem);
     }
   </script>
 </body>
