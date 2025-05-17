@@ -82,19 +82,19 @@
 
     .emoji-fall {
       position: absolute;
-      font-size: 1.5rem;
+      font-size: 2.5rem;
       animation: fall var(--fall-speed, 15s) linear forwards;
-      opacity: 0.6;
+      opacity: 1;
       transform: translateX(var(--x-offset));
     }
 
     @keyframes fall {
       0% {
         transform: translate(var(--x-offset), -20vh);
-        opacity: 0.6;
+        opacity: 1;
       }
       85% {
-        opacity: 0.6;
+        opacity: 1;
       }
       100% {
         transform: translate(var(--x-offset), 130vh);
@@ -149,23 +149,23 @@
     // Start continuous rain with all emojis
     function startContinuousRain() {
       const container = document.getElementById('rainContainer');
-      const maxEmojisOnScreen = 25; // Less invasive by limiting max emojis on screen
+      const maxEmojisOnScreen = 100; // Increased to 100 emojis as requested
       
       function addEmoji() {
         if (container.children.length < maxEmojisOnScreen) {
           const emoji = document.createElement('div');
           emoji.className = 'emoji-fall';
           emoji.textContent = allEmojis[Math.floor(Math.random() * allEmojis.length)];
-          emoji.style.setProperty('--x-offset', `${(Math.random() - 0.5) * 80}px`); // Less horizontal movement
+          emoji.style.setProperty('--x-offset', `${(Math.random() - 0.5) * 80}px`);
           emoji.style.left = Math.random() * 100 + 'vw';
           emoji.style.top = '-20px';
           
-          // Make animation slower and more varied for less invasive feel
-          const fallSpeed = 12 + Math.random() * 10; // Between 12-22 seconds
+          // Make animation varied
+          const fallSpeed = 10 + Math.random() * 8; // Between 10-18 seconds
           emoji.style.setProperty('--fall-speed', fallSpeed + 's');
           
-          // Vary the size but keep it smaller for less invasiveness
-          emoji.style.fontSize = (0.8 + Math.random() * 0.7) + 'rem';
+          // Larger size as requested
+          emoji.style.fontSize = (2 + Math.random() * 1.5) + 'rem';
           
           container.appendChild(emoji);
           
@@ -178,12 +178,12 @@
         }
       }
       
-      // Add emojis at a slower, random interval
-      setInterval(addEmoji, 600 + Math.random() * 400);
+      // Add emojis at a faster rate to reach the higher count
+      setInterval(addEmoji, 200 + Math.random() * 200);
       
-      // Start with a few emojis
-      for (let i = 0; i < 8; i++) {
-        setTimeout(addEmoji, i * 300);
+      // Start with more emojis initially
+      for (let i = 0; i < 25; i++) {
+        setTimeout(addEmoji, i * 100);
       }
     }
 
