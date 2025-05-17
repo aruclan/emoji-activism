@@ -83,7 +83,7 @@
     .emoji-fall {
       position: absolute;
       font-size: 2rem;
-      animation: fall 7s linear forwards;
+      animation: fall 15s linear forwards;
       opacity: 0.9;
     }
 
@@ -125,7 +125,7 @@
     function triggerRain(category) {
       const container = document.getElementById('rainContainer');
       const emojis = emojiSets[category];
-      const numEmojis = 80;
+      const numEmojis = 150;
 
       for (let i = 0; i < numEmojis; i++) {
         const emoji = document.createElement('div');
