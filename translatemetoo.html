@@ -550,54 +550,68 @@
       }
       return dp[a.length][b.length];
     }
+function translateText() {
+  const inputField = document.getElementById("inputText");
+  const outputField = document.getElementById("outputText");
+  const historyList = document.getElementById("historyList");
+  const outputContainer = document.getElementById("outputContainer");
+  const historyContainer = document.getElementById("historyContainer");
 
-    function translateText() {
-      const inputField = document.getElementById("inputText");
-      const outputField = document.getElementById("outputText");
-      const historyList = document.getElementById("historyList");
-      const outputContainer = document.getElementById("outputContainer");
-      const historyContainer = document.getElementById("historyContainer");
+  let text = inputField.value.trim();
+  if (!text) return;
 
-      let text = inputField.value.trim();
-      if (!text) return;
+  // Show output container and history container if they're hidden
+  outputContainer.style.display = "block";
+  historyContainer.style.display = "block";
 
-      // Show output container and history container if they're hidden
-      outputContainer.style.display = "block";
-      historyContainer.style.display = "block";
-
-      const sentences = text.match(/[^.!?]+[.!?]?/g) || [];
-      const translatedSentences = sentences.map(sentence => {
-        let translated = sentence.split(/\s+/).map(wordWithPunctuation => {
-          const match = wordWithPunctuation.match(/^(\W*)([\w\-]+)(\W*)$/);
-          if (!match) return wordWithPunctuation;
-
-          const [, leading, word, trailing] = match;
-          const emojiList = getEmoji(word);
-          if (emojiList.length > 0) {
-            const emoji = emojiList[Math.floor(Math.random() * emojiList.length)];
-            return leading + emoji + trailing;
-          }
-          return wordWithPunctuation;
-        }).join(" ");
-
-        // Add the primary MeToo emojis for certain keywords
-        if (sentence.toLowerCase().includes("metoo") || 
-            sentence.toLowerCase().includes("me too") || 
-            sentence.toLowerCase().includes("voice") || 
-            sentence.toLowerCase().includes("speak")) {
-          translated = translated.trim() + " 🐰🍚";
-        }
-
-        return translated;
-      });
-
-      const finalTranslation = translatedSentences.join(" ");
-      outputField.innerText = finalTranslation;
-
-      const listItem = document.createElement("li");
-      listItem.textContent = `Original: "${text}" → Translated: "${finalTranslation}"`;
-      historyList.prepend(listItem);
+  // Create a copy of the original text for output
+  let outputText = text;
+  
+  // Replace "metoo" and "me too" with rice and bunny emojis
+  outputText = outputText.replace(/\b(metoo|me\s*too)\b/gi, '🍚🐰');
+  
+  // Find all unique words in the text that match our emoji dictionary
+  const words = text.toLowerCase().split(/\s+/).map(word => word.replace(/[^\w\-]/g, ''));
+  const uniqueWords = [...new Set(words)];
+  
+  // Collect relevant emojis to add at the end
+  const emojisToAdd = [];
+  
+  uniqueWords.forEach(word => {
+    if (!word) return; // Skip empty strings
+    
+    const emojiList = getEmoji(word);
+    if (emojiList.length > 0) {
+      // Select a random emoji from the list for this word
+      const randomEmoji = emojiList[Math.floor(Math.random() * emojiList.length)];
+      if (!emojisToAdd.includes(randomEmoji)) {
+        emojisToAdd.push(randomEmoji);
+      }
     }
+  });
+  
+  // Add collected emojis to the end of the text if we found any
+  if (emojisToAdd.length > 0) {
+    outputText = outputText + " " + emojisToAdd.join("");
+  }
+  
+  // If text contains keywords related to the movement but no rice/bunny emojis were added yet,
+  // add them explicitly
+  const movementKeywords = ["voice", "speak", "support", "strength", "solidarity"];
+  const hasMovementKeywords = movementKeywords.some(keyword => 
+    text.toLowerCase().includes(keyword)
+  );
+  
+  if (hasMovementKeywords && !outputText.includes('🍚') && !outputText.includes('🐰')) {
+    outputText += " 🍚🐰";
+  }
+
+  outputField.innerText = outputText;
+
+  const listItem = document.createElement("li");
+  listItem.textContent = `Original: "${text}" → Translated: "${outputText}"`;
+  historyList.prepend(listItem);
+}
   </script>
 </body>
 </html>
