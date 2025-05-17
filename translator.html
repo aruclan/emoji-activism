@@ -548,38 +548,42 @@ function translateText() {
   outputContainer.style.display = "block";
   historyContainer.style.display = "block";
 
-  // Keywords to replace directly with emojis
   const directReplace = ["palestine", "palestinian", "palestinians", "gaza"];
 
   const sentences = text.match(/[^.!?]+[.!?]?/g) || [];
   const translatedSentences = sentences.map(sentence => {
-    let emojiSummary = new Set();
+    let emojiSet = new Set();
+    let translatedWords = [];
 
-    let translated = sentence.split(/\s+/).map(wordWithPunctuation => {
+    sentence.split(/\s+/).forEach(wordWithPunctuation => {
       const match = wordWithPunctuation.match(/^(\W*)([\w\-]+)(\W*)$/);
-      if (!match) return wordWithPunctuation;
+      if (!match) {
+        translatedWords.push(wordWithPunctuation);
+        return;
+      }
 
       const [, leading, word, trailing] = match;
       const lowerWord = word.toLowerCase();
       const emojis = getEmoji(lowerWord);
 
+      // If the word is Palestine/Gaza, replace it inline
       if (directReplace.includes(lowerWord) && emojis.length > 0) {
         const emoji = emojis[Math.floor(Math.random() * emojis.length)];
-        return leading + emoji + trailing;
+        translatedWords.push(`${leading}${emoji}${trailing}`);
+      } else {
+        translatedWords.push(wordWithPunctuation);
+
+        // If emojis are associated and it's not a Palestine word
+        if (emojis.length > 0) {
+          const selected = emojis[Math.floor(Math.random() * emojis.length)];
+          emojiSet.add(selected);
+        }
       }
+    });
 
-      if (emojis.length > 0) {
-        emojis.forEach(e => emojiSummary.add(e));
-      }
-
-      return wordWithPunctuation;
-    }).join(" ");
-
-    if (emojiSummary.size > 0) {
-      translated += ` ${[...emojiSummary].join(" ")}`;
-    }
-
-    return translated;
+    const translatedLine = translatedWords.join(" ");
+    const emojiSuffix = emojiSet.size > 0 ? ` ${[...emojiSet].join(" ")}` : "";
+    return translatedLine + emojiSuffix;
   });
 
   const finalTranslation = translatedSentences.join(" ");
