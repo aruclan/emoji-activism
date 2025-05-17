@@ -149,7 +149,7 @@
     // Start continuous rain with all emojis
     function startContinuousRain() {
       const container = document.getElementById('rainContainer');
-      const maxEmojisOnScreen = 100; // Increased to 100 emojis as requested
+      const maxEmojisOnScreen = 70; // Reduced to 70 emojis as requested
       
       function addEmoji() {
         if (container.children.length < maxEmojisOnScreen) {
@@ -182,7 +182,7 @@
       setInterval(addEmoji, 200 + Math.random() * 200);
       
       // Start with more emojis initially
-      for (let i = 0; i < 25; i++) {
+      for (let i = 0; i < 20; i++) {
         setTimeout(addEmoji, i * 100);
       }
     }
