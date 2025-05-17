@@ -39,6 +39,7 @@
       font-size: clamp(2.2rem, 5.5vw, 4.5rem);
       margin-bottom: 20px;
       line-height: 1.2;
+      cursor: pointer;
     }
 
     .emoji-links {
@@ -82,7 +83,7 @@
     .emoji-fall {
       position: absolute;
       font-size: 2rem;
-      animation: fall 3s linear forwards;
+      animation: fall 7s linear forwards;
       opacity: 0.9;
     }
 
@@ -99,16 +100,16 @@
   </style>
 </head>
 <body>
-  <h1>WHEN WORDS ARE NO LONGER SAFE</h1>
+  <h1 id="mainTitle">WHEN WORDS ARE NO LONGER SAFE</h1>
   <div class="emoji-links">
     <div class="emoji-item">
-      <a href="translatemetoo.html"><span onmouseenter="triggerRain('metoo')">🍚🐰</span></a>
+      <a href="translatemetoo.html" onclick="triggerRain('metoo'); return false;"><span>🍚🐰</span></a>
     </div>
     <div class="emoji-item">
-      <a href="transalateblm.html"><span onmouseenter="triggerRain('blm')">✊🏿✊🏾✊🏽✊🏼✊🏻</span></a>
+      <a href="transalateblm.html" onclick="triggerRain('blm'); return false;"><span>✊🏿✊🏾✊🏽✊🏼✊🏻</span></a>
     </div>
     <div class="emoji-item">
-      <a href="translator.html"><span onmouseenter="triggerRain('palestine')">🍉</span></a>
+      <a href="translator.html" onclick="triggerRain('palestine'); return false;"><span>🍉</span></a>
     </div>
   </div>
 
@@ -131,12 +132,42 @@
         emoji.className = 'emoji-fall';
         emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
         emoji.style.left = Math.random() * 100 + 'vw';
-        emoji.style.animationDelay = (Math.random() * 1.5) + 's';
+        emoji.style.animationDelay = (Math.random() * 2.5) + 's';
         emoji.style.fontSize = (1.5 + Math.random() * 1.5) + 'rem';
         container.appendChild(emoji);
-        setTimeout(() => container.removeChild(emoji), 4000);
+        setTimeout(() => container.removeChild(emoji), 8000);
       }
     }
+
+    // Title morph effect
+    const title = document.getElementById("mainTitle");
+    const originalText = title.textContent;
+    const words = originalText.split(" ");
+    let interval;
+
+    function morphWords() {
+      let i = 0;
+      interval = setInterval(() => {
+        const emojis = [...emojiSets.metoo, ...emojiSets.blm, ...emojiSets.palestine];
+        const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+        const tempWords = [...words];
+        tempWords[i % tempWords.length] = randomEmoji;
+        title.textContent = tempWords.join(" ");
+        i++;
+      }, 300);
+    }
+
+    function resetTitle() {
+      clearInterval(interval);
+      title.textContent = originalText;
+    }
+
+    title.addEventListener("mouseenter", morphWords);
+    title.addEventListener("mouseleave", resetTitle);
+    title.addEventListener("touchstart", morphWords);
+    document.addEventListener("click", (e) => {
+      if (!title.contains(e.target)) resetTitle();
+    });
   </script>
 </body>
 </html>
