@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <style>
+  @font-face {
+    font-family: 'AkzidenzGrotesk';
+    src: url('fonts/AkzidenzGrotesk-MediumCond.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+</style>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BLM Emoji Translator</title>
@@ -312,12 +320,11 @@
       h2 {
         font-size: 5rem;
       }
-
-      .description {
-        font-size: 1rem;
-        padding: 0 15px;
-      }
-
+  
+   .description {
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
       textarea {
         max-width: 95%;
       }
@@ -398,8 +405,17 @@ Historically, trade unions as well as socialist and communist parties adopted th
     </div>
 
     <div class="main-column">
-      <h2>✊🏿✊🏾✊🏽✊🏼✊🏻</h2>
+      <h2 style="font-family: 'AkzidenzGrotesk', sans-serif; font-size: 3rem; line-height: 1.2;">
+  WHEN WORDS ARE NO LONGER SAFE<br/>WHAT CAN ✊🏿✊🏾✊🏽✊🏼✊🏻 SAY FOR US
+</h2>
       <p class="description">The raised fist has become a powerful symbol of Black resistance and solidarity, evolving from a physical gesture against oppression to a digital icon used to express support for racial justice. The black fist emoji represents strength, unity, and the ongoing fight against systemic racism. This translation tool is designed to help you engage in digital activism and amplify your message effectively. By focusing on emojis as symbols of resistance and community, it helps you find the most impactful combinations to express your cause.</p>
+      <div class="links" style="margin-bottom: 25px;">
+  <a href="https://docs.google.com/forms/d/e/1FAIpQLScNx_1KMWXjMjOh2RHTe8Nj_fY1IQdfU6KjKi8rlZQPpkYpPg/viewform?usp=header" target="_blank" style="display: block; font-size: 0.85rem; margin: 5px 0; text-decoration: underline; color: #000;">
+    Participate in our survey
+  </a>
+  <a href="guide/bookletguide.pdf" download style="display: block; font-size: 0.85rem; margin: 5px 0; text-decoration: underline; color: #000;">
+    Download Guide
+  </a>
       <textarea id="inputText" placeholder="Type your message..."></textarea><br>
       <button onclick="translateText()">Translate</button>
       
@@ -416,31 +432,6 @@ Historically, trade unions as well as socialist and communist parties adopted th
   </div>
 
   <script>
-    const emojisFromTranslator = [
-      "✊🏿", "🐐", "🖤", "✊🏿✊🏾✊🏽✊🏼✊🏻", "🤎", "✊", "💯", "❤️", "🔥", "👏🏿", "🎯", "👏", "☑️", "🏳️‍🌈", "💙", "🧡", "👊🏾", "👑",
-      "📸", "👏🏽", "👀", "🙏", "🙏🏽", "⚫", "💪🏿", "📌", "🙄", "✨", "✅", "👊🏿", "♥️", "🌹", "❗", "🕊", "🤍", "💈", "⚪", "💚",
-      "💜", "🎉", "🙏🏿", "😱", "🤬", "🏳️‍⚧️", "👇🏽", "🫱🏼‍🫲🏾", "✌🏾", "😁", "💗", "🐈‍⬛", "🐕‍🦺", "🥺", "🙏🏾", "😔", "📚", "❌",
-      "🔴", "🔵", "📷", "🙌🏿", "🤷🏿‍♂️", "🫶🏽", "💩", "🕳️", "💪🏾", "🫱🏾‍🫲🏼", "🩵", "🩶", "🎭", "🎟️", "🐾", "🌱", "🌍", "😍",
-      "🤸🏿", "🫱🏿‍🫲🏻", "🌟", "🚶", "🚶🏾", "🌉", "⛓️", "🤔", "☺️", "🚨", "💇🏿‍♂️"
-    ];
-
-    window.addEventListener('load', () => {
-      const container = document.getElementById('rainContainer');
-      const numEmojis = 100;
-      for (let i = 0; i < numEmojis; i++) {
-        const emoji = document.createElement('div');
-        emoji.className = 'emoji-fall';
-        emoji.textContent = emojisFromTranslator[Math.floor(Math.random() * emojisFromTranslator.length)];
-        emoji.style.setProperty('--x-offset', `${(Math.random() - 0.5) * 100}px`);
-        emoji.style.left = Math.random() * 100 + 'vw';
-        emoji.style.top = Math.random() * -30 + 'vh';
-        emoji.style.setProperty('--fall-speed', (6 + Math.random() * 6).toFixed(2) + 's');
-        emoji.style.fontSize = (1.5 + Math.random() * 1.5) + 'rem';
-        container.appendChild(emoji);
-        setTimeout(() => container.removeChild(emoji), 12000);
-      }
-    });
-
     function toggleMobileModal(modalId) {
       const modal = document.getElementById(modalId);
       modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
