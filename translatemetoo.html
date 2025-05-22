@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+   <style>
+  @font-face {
+    font-family: 'AkzidenzGrotesk';
+    src: url('fonts/AkzidenzGrotesk-MediumCond.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+</style>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Emoji Translator</title>
@@ -280,10 +288,10 @@
         font-size: 5rem;
       }
 
-      .description {
-        font-size: 1rem;
-        padding: 0 15px;
-      }
+         .description {
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
 
       textarea {
         max-width: 95%;
@@ -314,43 +322,9 @@
       }
     }
     
-    /* Emoji Rain Animation Styles */
-    .rain-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 1000;
-    }
-
-    .emoji-fall {
-      position: absolute;
-      font-size: 2rem;
-      animation: fall var(--fall-speed, 8s) ease-in forwards;
-      opacity: 1;
-      transform: translateX(var(--x-offset));
-    }
-
-    @keyframes fall {
-      0% {
-        transform: translate(var(--x-offset), -20vh);
-        opacity: 1;
-      }
-      80% {
-        opacity: 1;
-      }
-      100% {
-        transform: translate(var(--x-offset), 130vh);
-        opacity: 0;
-      }
-    }
   </style>
 </head>
 <body>
-  <div class="rain-container" id="rainContainer"></div>
 
   <button class="mobile-btn mobile-history-btn" onclick="toggleMobileModal('mobileHistoryModal')">History</button>
   <button class="mobile-btn mobile-disclaimer-btn" onclick="toggleMobileModal('mobileDisclaimerModal')">About the Data</button>
@@ -391,8 +365,17 @@
     </div>
 
     <div class="main-column">
-      <h2>🍚🐰</h2>
+      <h2 style="font-family: 'AkzidenzGrotesk', sans-serif; font-size: 3rem; line-height: 1.2;">
+  WHEN WORDS ARE NO LONGER SAFE<br/>WHAT CAN 🍚🐰 SAY FOR US
+</h2>
       <p class="description">The phrase "rice bunny," pronounced "mi tu" in Chinese, is a homophone for "Me Too" and has been used as a clever workaround to evade online censorship in China. This linguistic tactic has been part of a broader tradition of using wordplay for political dissent. In 2018, after the #MeToo hashtag was blocked on Weibo, users adopted "mi tu" (米兔) and rice bunny emojis to continue discussing feminist issues. By focusing on emojis as symbols of resistance and community, it helps you find the most impactful combinations to express your cause. Take a moment to reflect on and share your thoughts about this movement.</p>
+      <div class="links" style="margin-bottom: 25px;">
+  <a href="https://docs.google.com/forms/d/e/1FAIpQLScNx_1KMWXjMjOh2RHTe8Nj_fY1IQdfU6KjKi8rlZQPpkYpPg/viewform?usp=header" target="_blank" style="display: block; font-size: 0.85rem; margin: 5px 0; text-decoration: underline; color: #000;">
+    Participate in our survey
+  </a>
+  <a href="guide/bookletguide.pdf" download style="display: block; font-size: 0.85rem; margin: 5px 0; text-decoration: underline; color: #000;">
+    Download Guide
+  </a>
       <textarea id="inputText" placeholder="Type your message..."></textarea><br>
       <button onclick="translateText()">Translate</button>
       
@@ -409,31 +392,7 @@
   </div>
 
   <script>
-    // Emoji rain animation
-    window.addEventListener('load', () => {
-      const container = document.getElementById('rainContainer');
-      const emojisFromTranslator = [
-        "🐰", "🍚", "✊", "💪", "🎀", "❤️", "🔥", "💔", "🧠", "💥",
-        "🗣️", "🌸", "🐇", "📡", "🕯️", "🧡", "💜", "🌍", "😅", "🥢",
-        "🙅🏻‍♀️", "🦅", "❤️‍🔥", "💕", "✨", "❌", "🍯", "🐝", "🫶", "🥊",
-        "🦷", "🫀", "⛅", "🧷", "✌🏼", "❤️‍🩹", "♀️", "🕊️", "🕳️", "⛓️",
-        "🔍", "✋🏻", "🌈"
-      ];
-      
-      const numEmojis = 100;
-      for (let i = 0; i < numEmojis; i++) {
-        const emoji = document.createElement('div');
-        emoji.className = 'emoji-fall';
-        emoji.textContent = emojisFromTranslator[Math.floor(Math.random() * emojisFromTranslator.length)];
-        emoji.style.setProperty('--x-offset', `${(Math.random() - 0.5) * 100}px`);
-        emoji.style.left = Math.random() * 100 + 'vw';
-        emoji.style.top = Math.random() * -30 + 'vh';
-        emoji.style.setProperty('--fall-speed', (6 + Math.random() * 6).toFixed(2) + 's');
-        emoji.style.fontSize = (1.5 + Math.random() * 1.5) + 'rem';
-        container.appendChild(emoji);
-        setTimeout(() => container.removeChild(emoji), 12000);
-      }
-    });
+
 
     function toggleMobileModal(modalId) {
       const modal = document.getElementById(modalId);
