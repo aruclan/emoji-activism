@@ -8,6 +8,13 @@
     font-weight: normal;
     font-style: normal;
   }
+<style>
+  @font-face {
+    font-family: 'AkzidenzGrotesk';
+    src: url('fonts/AkzidenzGrotesk-MediumCond.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
 
   :root {
     --bg-primary: #ffffff;
@@ -15,7 +22,7 @@
     --bg-secondary: #ffffff;
     --border-color: #000;
     --shadow-light: rgba(0, 0, 0, 0.05);
-    --shadow-medium: rgba(0,0,0,0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.1);
   }
 
   * {
@@ -175,6 +182,12 @@
     display: none;
   }
 
+  @media (max-width: 1024px) {
+    h2 {
+      font-size: 6rem;
+    }
+  }
+
   @media (max-width: 768px) {
     body {
       flex-direction: column;
@@ -192,25 +205,11 @@
     .main-column {
       width: 100%;
       margin-left: 0;
-      padding-top: 60px;
+      padding: 60px 20px;
     }
 
     .mobile-btn {
       display: block;
-      position: fixed;
-      z-index: 1000;
-      background-color: #fff;
-      color: #000;
-      border: 0.5px solid var(--border-color);
-      padding: 10px 15px;
-      border-radius: 999px;
-      font-weight: 500;
-      transition: all 0.2s ease;
-    }
-
-    .mobile-btn:hover {
-      background-color: #000;
-      color: #fff;
     }
 
     h2 {
@@ -220,6 +219,7 @@
     .description {
       font-size: 0.75rem;
       padding: 0 15px;
+      line-height: 1.4;
     }
 
     textarea,
@@ -337,6 +337,7 @@ Historically, trade unions as well as socialist and communist parties adopted th
   </div> 
       <p>For examble, ✊🏿 is a visual symbol used globally by a wide array of social movements and political organizations. It manifests either as a physical gesture—an arm raised with a clenched fist—or as a graphic icon appearing on posters, placards, street art, pamphlets, badges, and clothing. Like all symbols, it conveys abstract ideas—most notably resistance. It also embodies the concept of "power from below" and the solidarity of people united in political struggle. As a result, the raised fist is commonly associated with democratic movements and popular uprisings against oppression.
       </p>
+      <div class="history-item">
         <img src="images/fist9.png" alt="historical Image">
   <p>The photo was taken at the Dam Square Protests (01/06/2020), Suzy Kay, BLM Protest Photographs</p>
   </div> 
