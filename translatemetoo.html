@@ -380,12 +380,10 @@
       <button onclick="translateText()">Translate</button>
       
       <div id="outputContainer" class="output-container">
-        <p>Translated Text:</p>
         <p id="outputText"></p>
       </div>
       
       <div id="historyContainer" style="display:none;">
-        <h3>Translation History:</h3>
         <ul id="historyList"></ul>
       </div>
     </div>
@@ -568,7 +566,7 @@ function translateText() {
   outputField.innerText = outputText;
 
   const listItem = document.createElement("li");
-  listItem.textContent = `Original: "${text}" → Translated: "${outputText}"`;
+  listItem.textContent = `"${text}" → "${outputText}"`;
   historyList.prepend(listItem);
 }
   </script>
