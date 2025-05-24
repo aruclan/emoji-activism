@@ -89,6 +89,13 @@
       transform: translateX(var(--x-offset));
     }
 
+    @media (max-width: 768px) {
+  .emoji-links {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
     @keyframes fall {
       0% {
         transform: translate(var(--x-offset), -20vh);
