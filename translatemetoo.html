@@ -181,6 +181,32 @@
     margin-bottom: 10px;
     margin-top: 10px;
   }
+    /* Responsive title styling */
+.responsive-title {
+  font-family: 'AkzidenzGrotesk', sans-serif;
+  font-size: 3rem;
+  line-height: 1.2;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  text-align: center;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+@media (max-width: 768px) {
+  .responsive-title {
+    font-size: 2rem;
+    line-height: 1.3;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-title {
+    font-size: 1.6rem;
+    line-height: 1.4;
+    padding: 0 10px;
+  }
+}
 
   .description {
   font-size: 0.85rem;
@@ -416,7 +442,7 @@ supporters held up the rice rabbit logo outside the court to show their support.
     </div>
 
     <div class="main-column">
-      <h2 style="font-family: 'AkzidenzGrotesk', sans-serif; font-size: 3rem; line-height: 1.2;">
+      <h2 class="responsive-title">
   WHEN WORDS ARE NO LONGER SAFE,<br/>WHAT CAN WE SAY FOR 🍚🐰?
 </h2>
       <p class="description">
