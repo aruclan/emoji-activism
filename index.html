@@ -80,7 +80,7 @@
       text-decoration: none;
     }
 
-    .rain-container {
+  /*  .rain-container {
       position: fixed;
       top: 0;
       left: 0;
@@ -97,7 +97,7 @@
       animation: fall var(--fall-speed, 15s) linear forwards;
       opacity: 1;
       transform: translateX(var(--x-offset));
-    }
+    } */
 
     @media (max-width: 768px) {
   .emoji-links {
@@ -118,9 +118,9 @@
         transform: translate(var(--x-offset), 130vh);
         opacity: 0;
       }
-    }
+    } 
     /* Responsive emoji size adjustments for smaller screens */
-@media (max-width: 768px) {
+/*@media (max-width: 768px) {
   .emoji-fall {
     font-size: 1.5rem !important;
   }
@@ -130,7 +130,7 @@
   .emoji-fall {
     font-size: 1.2rem !important;
   }
-}
+}*/
   </style>
 </head>
 <body>
@@ -146,8 +146,6 @@
       <a href="translator.html"><span>🍉</span></a>
     </div>
   </div>
-
-  <div class="rain-container" id="rainContainer"></div>
 
   <script>
     const emojiSets = {
@@ -177,7 +175,7 @@
     ];
 
     // Start continuous rain with all emojis
-    function startContinuousRain() {
+    /*function startContinuousRain() {
       const container = document.getElementById('rainContainer');
       const maxEmojisOnScreen = 70; // Reduced to 70 emojis as requested
       
@@ -215,7 +213,7 @@
       for (let i = 0; i < 20; i++) {
         setTimeout(addEmoji, i * 100);
       }
-    }
+    } */
 
     // Title morph effect
     const title = document.getElementById("mainTitle");
@@ -247,7 +245,7 @@
     });
 
     // Start continuous rain when page loads
-    window.addEventListener('load', startContinuousRain);
+    //window.addEventListener('load', startContinuousRain);
   </script>
 </body>
 </html>
